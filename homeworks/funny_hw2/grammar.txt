@@ -1,0 +1,136 @@
+Funny -- грамматика, реализованная в HW2 (рекурсивный спуск, LL(1)-ветка)
+
+1. Верхний уровень
+
+module        = { functionDef | formulaDef } ;
+
+functionDef   = "function" identifier
+                "(" [ variableDef { "," variableDef } ] ")"
+                [ "requires" expr ]
+                "returns" variableDef { "," variableDef }
+                [ "ensures" expr ]
+                [ "uses" localVarDef { "," localVarDef } ]
+                statement ;
+
+formulaDef    = identifier
+                "(" [ variableDef { "," variableDef } ] ")"
+                "=>" expr ";" ;
+
+    ОТКЛОНЕНИЕ (ключевое слово "function"):
+    В спецификации правило записано как
+        function = identifier "(" ... ;
+    то есть формально определение функции начинается сразу с имени, без
+    ключевого слова. Но лексер HW1 (tokens.json) резервирует "function"
+    как отдельное ключевое слово -- оно должно для чего-то использоваться,
+    иначе сам факт его резервирования бессмыслен, и это противоречило бы
+    тестам HW1 ("mixed Funny source" и т.п.), где "function" используется
+    именно как первое слово определения. Поэтому здесь: определение
+    ФУНКЦИИ обязано начинаться с "function", а определение ФОРМУЛЫ (для
+    которой отдельного ключевого слова в tokens.json нет) по-прежнему
+    начинается сразу с identifier. Эти два случая взаимно-однозначно
+    различимы по наличию/отсутствию токена FUNCTION в самом начале --
+    никакого дополнительного лукахеда для этого не требуется.
+
+variableDef   = identifier ":" variableType ;
+localVarDef   = identifier [ ":" variableType ] ;
+variableType  = "int" [ "[" "]" ] ;
+
+2. Операторы (statement)
+
+statement     = block | conditional | loop | assertStmt | assumeStmt
+              | assignment ;
+
+block         = "{" { statement } "}" ;
+
+conditional   = "if" "(" expr ")" statement [ "else" statement ] ;
+
+loop          = "while" "(" expr ")" [ "invariant" expr ] statement ;
+
+assertStmt    = "assert" expr ";" ;
+assumeStmt    = "assume" expr ";" ;
+
+assignment    = identifier { "[" expr "]" } "=" expr ";"              (* varName=expr или arrayAccess=expr *)
+              | identifier { "," identifier } "=" call ";" ;          (* varName{,varName}=functionCall *)
+
+    Реализация различает эти формы без возврата назад (backtracking):
+    после первого identifier смотрим на следующий токен:
+      '['  -> это arrayAccess-цепочка (a[i], a[i][j], ...), всегда
+              заканчивается одним '=' expr ';' (простое присваивание по
+              индексу, без списка через запятую -- так в исходной
+              грамматике assignment, сахар для функционального
+              обновления массива не распространяется на tuple-форму);
+      ','  или '='  -> накапливаем список имён через запятую; если имя
+              было одно -- справа разрешён любой expr (внутри него уже
+              естественным образом допускается и functionCall, т.к. он
+              является одной из альтернатив atom); если имён несколько --
+              справа требуется именно functionCall (разбирается отдельным
+              правилом call, не общим expr).
+
+3. Выражения: expr / condition / predicate объединены в одну грамматику
+
+    отклонение (объединение трёх грамматик в одну):
+    Исходная спецификация формально разводит expr (целочисленные
+    арифметические выражения), condition (логические выражения в if/
+    while) и predicate (логические выражения в requires/ensures/
+    invariant/assert/assume, с добавлением кванторов и ссылок на
+    формулы). У всех трёх одинаковая форма "атом + бинарные операторы",
+    различается только набор допустимых операторов и то, что predicate
+    дополнительно разрешает quantifier и formulaRef. Здесь используется одна грамматика выражений на
+    все три случая; AST из неё впоследствии можно проверить на
+    корректность типов отдельным проходом.
+
+    Дополнительно: predicate в исходном тексте не включает оператор "->"
+    (импликация) явно -- только condition. Это выглядит как
+    непреднамеренный пропуск в спецификации (импликация -- стандартная и
+    крайне употребимая связка именно в requires/ensures/invariant), и
+    в этой реализации "->" разрешён на обоих уровнях одинаково (поскольку
+    они в любом случае объединены в одну грамматику).
+
+expr          = implies ;
+
+implies       = or [ "->" implies ] ;                    (* право-ассоциативно, низший приоритет *)
+or            = and { "or" and } ;                        (* лево-ассоциативно *)
+and           = notExpr { "and" notExpr } ;                (* лево-ассоциативно *)
+notExpr       = "not" notExpr | comparison ;               (* префиксный, допускает "not not x" *)
+comparison    = additive [ compOp additive ] ;              (* НЕ цепочка: a<b<c не допускается *)
+compOp        = "==" | "!=" | ">=" | "<=" | ">" | "<" ;
+additive      = multiplicative { ("+" | "-") multiplicative } ;  (* лево-ассоциативно *)
+multiplicative= unary { ("*" | "/") unary } ;                     (* лево-ассоциативно *)
+unary         = "-" unary | atom ;
+
+atom          = "true" | "false"
+              | quantifier
+              | "(" expr ")"
+              | number
+              | call                                    (* identifier "(" args ")" -- functionCall И formulaRef *)
+              | "length" "(" expr ")"                    (* встроенная функция, отдельное ключевое слово в лексере *)
+              | identifier { "[" expr "]" } ;            (* variable | arrayAccess *)
+
+call          = identifier "(" [ expr { "," expr } ] ")" ;
+
+quantifier    = ("forall" | "exists") "(" variableDef "|" expr ")" ;
+
+    ОТКЛОНЕНИЕ (length как отдельная ветка атома):
+    length(a) определена в спецификации как встроенная функция, вызываемая
+    как обычный functionCall. Но в tokens.json (HW1) слово "length" --
+    ОТДЕЛЬНОЕ зарезервированное ключевое слово LENGTH, а не IDENT, поэтому
+    общее правило "call = identifier ( args )" его не ловит (IDENT и
+    LENGTH -- разные типы токенов). В этой грамматике length(...) поэтому
+    выделена в отдельную альтернативу atom с тем же синтаксисом вызова.
+
+4. Разрешение конфликтов, которые в исходной грамматике требовали бы
+   неограниченного лукахеда или backtracking
+
+* functionDef vs formulaDef -- решается наличием/отсутствием
+  "function".
+* assignment: varName=expr vs arrayAccess=expr vs varName,...=call --
+  решается форой на '[' / ',' сразу после первого identifier.
+* atom: identifier( ) vs identifier[ ] vs просто identifier -- решается
+  ОДНИМ токеном лукахеда вперёд (смотрим на токен сразу после identifier,
+  не потребляя его), без возврата назад.
+* "(" в начале atom -- всегда просто группировка общей грамматики expr
+  (включающей и то, что по смыслу было бы condition/predicate) -- так как
+  у нас одна грамматика на все три случая, конфликт
+  "предикат в скобках" vs "арифметика в скобках" не возникает вообще:
+  он существовал только из-за формального разделения трёх грамматик в
+  исходном тексте.
