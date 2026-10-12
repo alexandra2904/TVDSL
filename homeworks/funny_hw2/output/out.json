@@ -1,0 +1,56 @@
+{
+  "node": "Module",
+  "functions": [
+    {
+      "node": "FunctionDef",
+      "name": "f",
+      "params": [
+        {
+          "node": "VariableDef",
+          "name": "x",
+          "type": "int",
+          "pos": 11
+        }
+      ],
+      "requires": null,
+      "returns": [
+        {
+          "node": "VariableDef",
+          "name": "r",
+          "type": "int",
+          "pos": 27
+        }
+      ],
+      "ensures": null,
+      "uses": [],
+      "body": {
+        "node": "Block",
+        "statements": [
+          {
+            "node": "SimpleAssign",
+            "target": "r",
+            "value": {
+              "node": "BinOp",
+              "op": "+",
+              "left": {
+                "node": "Var",
+                "name": "x",
+                "pos": 40
+              },
+              "right": {
+                "node": "IntLiteral",
+                "value": 1,
+                "pos": 44
+              },
+              "pos": 42
+            },
+            "pos": 36
+          }
+        ],
+        "pos": 34
+      },
+      "pos": 9
+    }
+  ],
+  "formulas": []
+}

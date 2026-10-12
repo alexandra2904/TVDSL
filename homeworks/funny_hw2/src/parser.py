@@ -81,7 +81,7 @@ class Parser:
         while self._current() is not None:
             start_pos = self.pos
             try:
-                defn = self._parse_function_or_formula()
+                defn = self._parse_function_or_formula() # пока есть токены пробуем разобрать функцию или формулу
                 if isinstance(defn, FunctionDef):
                     module.functions.append(defn)
                 else:
@@ -96,18 +96,18 @@ class Parser:
         if self.pos == start_pos:
             self._advance()
         depth = 0
-        while self._current() is not None:
+        while self._current() is not None: # Идёт по токенам, отслеживая глубину () и {}
             name = self._peek_name()
             if name in ("LPAREN", "LBRACE"):
                 depth += 1
             elif name in ("RPAREN", "RBRACE"):
                 depth = max(0, depth - 1)
-            elif depth == 0 and name in _TOP_LEVEL_START:
+            elif depth == 0 and name in _TOP_LEVEL_START: # Останавливается, когда на нулевой глубине встречает IDENT — начало новой формулы
                 return
             self._advance()
 
 
-    def _parse_function_or_formula(self):
+    def _parse_function_or_formula(self): # разбор одного определения если функция возвращаем функцию если формула то формулу по грамматике 
         is_function = self._check("FUNCTION")
         if is_function:
             self._advance()
@@ -150,25 +150,25 @@ class Parser:
         body = self._parse_statement()
         return FunctionDef(name_tok.lexeme, params, requires, returns, ensures, uses, body, name_tok.start)
 
-    def _parse_variable_def_list(self) -> list[VariableDef]:
+    def _parse_variable_def_list(self) -> list[VariableDef]: # список может быть пустым 
         if self._check("RPAREN"):
             return []
         return self._parse_variable_def_list_nonempty()
 
-    def _parse_variable_def_list_nonempty(self) -> list[VariableDef]:
+    def _parse_variable_def_list_nonempty(self) -> list[VariableDef]: # если непустой минимум один variabledef
         defs = [self._parse_variable_def()]
         while self._check("COMMA"):
             self._advance()
             defs.append(self._parse_variable_def())
         return defs
 
-    def _parse_variable_def(self) -> VariableDef:
+    def _parse_variable_def(self) -> VariableDef:  # тип обязателен
         name_tok = self._expect("IDENT")
         self._expect("COLON")
         vtype = self._parse_variable_type()
         return VariableDef(name_tok.lexeme, vtype, name_tok.start)
 
-    def _parse_variable_type(self) -> str:
+    def _parse_variable_type(self) -> str: # Разбирает int или int[]
         self._expect("INT_TYPE")
         if self._check("LBRACKET"):
             self._advance()
@@ -176,7 +176,7 @@ class Parser:
             return "int[]"
         return "int"
 
-    def _parse_local_var_def_list_nonempty(self) -> list[LocalVarDef]:
+    def _parse_local_var_def_list_nonempty(self) -> list[LocalVarDef]: # то же самое для локальных переменных
         defs = [self._parse_local_var_def()]
         while self._check("COMMA"):
             self._advance()
@@ -192,7 +192,7 @@ class Parser:
         return LocalVarDef(name_tok.lexeme, vtype, name_tok.start)
 
 
-    def _parse_statement(self):
+    def _parse_statement(self): # По первому токену выбирает вид оператора. Иначе — ошибка
         name = self._peek_name()
         if name == "LBRACE":
             return self._parse_block()
@@ -222,7 +222,7 @@ class Parser:
                 self._advance()
             return None
 
-    def _parse_block(self) -> Block:
+    def _parse_block(self) -> Block: # Разбирает { ... }. Каждый оператор идёт через _parse_statement_recovering, чтобы одна ошибка не убила весь блок. В конце ожидает }
         lbrace = self._expect("LBRACE")
         statements = []
         while self._current() is not None and not self._check("RBRACE"):
@@ -232,7 +232,7 @@ class Parser:
         self._expect("RBRACE")
         return Block(statements, lbrace.start)
 
-    def _parse_if(self) -> If:
+    def _parse_if(self) -> If: # if (expr) stmt [else stmt] 
         kw = self._expect("IF")
         self._expect("LPAREN")
         condition = self._parse_expr()
@@ -244,7 +244,7 @@ class Parser:
             else_branch = self._parse_statement()
         return If(condition, then_branch, else_branch, kw.start)
 
-    def _parse_while(self) -> While:
+    def _parse_while(self) -> While: # while (expr) [invariant expr] 
         kw = self._expect("WHILE")
         self._expect("LPAREN")
         condition = self._parse_expr()
@@ -268,7 +268,7 @@ class Parser:
         self._expect("SEMICOLON")
         return Assume(pred, kw.start)
 
-    def _parse_assignment_or_array_update(self):
+    def _parse_assignment_or_array_update(self): # Присваивание
         name_tok = self._expect("IDENT")
 
         if self._check("LBRACKET"):
@@ -337,7 +337,7 @@ class Parser:
         "EQ": "==", "NE": "!=", "GE": ">=", "LE": "<=", "GT": ">", "LT": "<",
     }
 
-    def _parse_comparison(self):
+    def _parse_comparison(self): # Сравнение цепочкой запрещено 
         left = self._parse_additive()
         if self._check_any(self._COMPARISON_OPS):
             op_tok = self._advance()
@@ -450,4 +450,4 @@ class Parser:
 def parse(tokens: list, text: str = "") -> tuple[Module, list[ParserError]]:
     parser = Parser(tokens, text)
     module = parser.parse_module()
-    return module, parser.errors
+    return module, parser.errors 
