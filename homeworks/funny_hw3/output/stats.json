@@ -1,0 +1,8 @@
+{
+  "nfa_states": 295,
+  "dfa_states_before_minimization": 125,
+  "dfa_states_after_minimization": 122,
+  "alphabet_size": 128,
+  "trap_state": 1,
+  "token_count": 47
+}

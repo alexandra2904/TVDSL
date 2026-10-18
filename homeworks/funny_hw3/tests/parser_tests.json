@@ -1,0 +1,151 @@
+{
+  "tests": [
+    {
+      "name": "expr: multiplication binds tighter than addition",
+      "kind": "expr",
+      "input": "1 + 2 * 3",
+      "expected_ast": {"node": "BinOp", "op": "+", "left": {"node": "IntLiteral", "value": 1}, "right": {"node": "BinOp", "op": "*", "left": {"node": "IntLiteral", "value": 2}, "right": {"node": "IntLiteral", "value": 3}}}
+    },
+    {
+      "name": "expr: parentheses override precedence",
+      "kind": "expr",
+      "input": "(1 + 2) * 3",
+      "expected_ast": {"node": "BinOp", "op": "*", "left": {"node": "BinOp", "op": "+", "left": {"node": "IntLiteral", "value": 1}, "right": {"node": "IntLiteral", "value": 2}}, "right": {"node": "IntLiteral", "value": 3}}
+    },
+    {
+      "name": "expr: minus is left-associative",
+      "kind": "expr",
+      "input": "a - b - c",
+      "expected_ast": {"node": "BinOp", "op": "-", "left": {"node": "BinOp", "op": "-", "left": {"node": "Var", "name": "a"}, "right": {"node": "Var", "name": "b"}}, "right": {"node": "Var", "name": "c"}}
+    },
+    {
+      "name": "expr: implication is right-associative",
+      "kind": "expr",
+      "input": "a -> b -> c",
+      "expected_ast": {"node": "BinOp", "op": "->", "left": {"node": "Var", "name": "a"}, "right": {"node": "BinOp", "op": "->", "left": {"node": "Var", "name": "b"}, "right": {"node": "Var", "name": "c"}}}
+    },
+    {
+      "name": "expr: not > and > or precedence",
+      "kind": "expr",
+      "input": "not a and b or c",
+      "expected_ast": {"node": "BinOp", "op": "or", "left": {"node": "BinOp", "op": "and", "left": {"node": "UnaryOp", "op": "not", "operand": {"node": "Var", "name": "a"}}, "right": {"node": "Var", "name": "b"}}, "right": {"node": "Var", "name": "c"}}
+    },
+    {
+      "name": "expr: comparisons combined with and",
+      "kind": "expr",
+      "input": "a == b and c != d",
+      "expected_ast": {"node": "BinOp", "op": "and", "left": {"node": "BinOp", "op": "==", "left": {"node": "Var", "name": "a"}, "right": {"node": "Var", "name": "b"}}, "right": {"node": "BinOp", "op": "!=", "left": {"node": "Var", "name": "c"}, "right": {"node": "Var", "name": "d"}}}
+    },
+    {
+      "name": "expr: unary minus binds tighter than plus",
+      "kind": "expr",
+      "input": "-x + 1",
+      "expected_ast": {"node": "BinOp", "op": "+", "left": {"node": "UnaryOp", "op": "-", "operand": {"node": "Var", "name": "x"}}, "right": {"node": "IntLiteral", "value": 1}}
+    },
+    {
+      "name": "expr: array access inside arithmetic",
+      "kind": "expr",
+      "input": "a[i] + 1",
+      "expected_ast": {"node": "BinOp", "op": "+", "left": {"node": "ArrayAccess", "base": {"node": "Var", "name": "a"}, "index": {"node": "Var", "name": "i"}}, "right": {"node": "IntLiteral", "value": 1}}
+    },
+    {
+      "name": "expr: function calls as operands",
+      "kind": "expr",
+      "input": "f(1, 2) + g()",
+      "expected_ast": {"node": "BinOp", "op": "+", "left": {"node": "Call", "name": "f", "args": [{"node": "IntLiteral", "value": 1}, {"node": "IntLiteral", "value": 2}]}, "right": {"node": "Call", "name": "g", "args": []}}
+    },
+    {
+      "name": "expr: boolean literals",
+      "kind": "expr",
+      "input": "true or false",
+      "expected_ast": {"node": "BinOp", "op": "or", "left": {"node": "BoolLiteral", "value": true}, "right": {"node": "BoolLiteral", "value": false}}
+    },
+    {
+      "name": "expr: forall quantifier",
+      "kind": "expr",
+      "input": "forall(i: int | i >= 0)",
+      "expected_ast": {"node": "Quantifier", "kind": "forall", "var": {"node": "VariableDef", "name": "i", "type": "int"}, "body": {"node": "BinOp", "op": ">=", "left": {"node": "Var", "name": "i"}, "right": {"node": "IntLiteral", "value": 0}}}
+    },
+
+    {
+      "name": "module: simple identity function",
+      "kind": "module",
+      "input": "function id(x: int) returns r: int { r = x; }",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "id", "params": [{"node": "VariableDef", "name": "x", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "r", "type": "int"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": [{"node": "SimpleAssign", "target": "r", "value": {"node": "Var", "name": "x"}}]}}], "formulas": []}
+    },
+    {
+      "name": "module: if/else with unary minus",
+      "kind": "module",
+      "input": "function abs(x: int) returns r: int {\n  if (x < 0) { r = -x; } else { r = x; }\n}",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "abs", "params": [{"node": "VariableDef", "name": "x", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "r", "type": "int"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": [{"node": "If", "condition": {"node": "BinOp", "op": "<", "left": {"node": "Var", "name": "x"}, "right": {"node": "IntLiteral", "value": 0}}, "then_branch": {"node": "Block", "statements": [{"node": "SimpleAssign", "target": "r", "value": {"node": "UnaryOp", "op": "-", "operand": {"node": "Var", "name": "x"}}}]}, "else_branch": {"node": "Block", "statements": [{"node": "SimpleAssign", "target": "r", "value": {"node": "Var", "name": "x"}}]}}]}}], "formulas": []}
+    },
+    {
+      "name": "module: while loop with two assignments",
+      "kind": "module",
+      "input": "function sumTo(n: int) returns s: int {\n  s = 0;\n  while (n > 0) { s = s + n; n = n - 1; }\n}",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "sumTo", "params": [{"node": "VariableDef", "name": "n", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "s", "type": "int"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": [{"node": "SimpleAssign", "target": "s", "value": {"node": "IntLiteral", "value": 0}}, {"node": "While", "condition": {"node": "BinOp", "op": ">", "left": {"node": "Var", "name": "n"}, "right": {"node": "IntLiteral", "value": 0}}, "invariant": null, "body": {"node": "Block", "statements": [{"node": "SimpleAssign", "target": "s", "value": {"node": "BinOp", "op": "+", "left": {"node": "Var", "name": "s"}, "right": {"node": "Var", "name": "n"}}}, {"node": "SimpleAssign", "target": "n", "value": {"node": "BinOp", "op": "-", "left": {"node": "Var", "name": "n"}, "right": {"node": "IntLiteral", "value": 1}}}]}}]}}], "formulas": []}
+    },
+    {
+      "name": "module: formula definition (=>), no function keyword",
+      "kind": "module",
+      "input": "isPos(x: int) => x > 0;",
+      "expected_ast": {"node": "Module", "functions": [], "formulas": [{"node": "FormulaDef", "name": "isPos", "params": [{"node": "VariableDef", "name": "x", "type": "int"}], "body": {"node": "BinOp", "op": ">", "left": {"node": "Var", "name": "x"}, "right": {"node": "IntLiteral", "value": 0}}}]}
+    },
+    {
+      "name": "module: requires/ensures/uses, array params, length() builtin",
+      "kind": "module",
+      "input": "function sumAll(a: int[]) returns s: int ensures forall(i: int | i >= 0 -> i < length(a)) { s = 0; }",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "sumAll", "params": [{"node": "VariableDef", "name": "a", "type": "int[]"}], "requires": null, "returns": [{"node": "VariableDef", "name": "s", "type": "int"}], "ensures": {"node": "Quantifier", "kind": "forall", "var": {"node": "VariableDef", "name": "i", "type": "int"}, "body": {"node": "BinOp", "op": "->", "left": {"node": "BinOp", "op": ">=", "left": {"node": "Var", "name": "i"}, "right": {"node": "IntLiteral", "value": 0}}, "right": {"node": "BinOp", "op": "<", "left": {"node": "Var", "name": "i"}, "right": {"node": "Call", "name": "length", "args": [{"node": "Var", "name": "a"}]}}}}, "uses": [], "body": {"node": "Block", "statements": [{"node": "SimpleAssign", "target": "s", "value": {"node": "IntLiteral", "value": 0}}]}}], "formulas": []}
+    },
+    {
+      "name": "module: nested array update a[i][j] = v (desugaring target)",
+      "kind": "module",
+      "input": "function f(a: int[], i: int, j: int, v: int) returns b: int[] { a[i][j] = v; b = a; }",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "f", "params": [{"node": "VariableDef", "name": "a", "type": "int[]"}, {"node": "VariableDef", "name": "i", "type": "int"}, {"node": "VariableDef", "name": "j", "type": "int"}, {"node": "VariableDef", "name": "v", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "b", "type": "int[]"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": [{"node": "ArrayAssign", "target": {"node": "ArrayAccess", "base": {"node": "ArrayAccess", "base": {"node": "Var", "name": "a"}, "index": {"node": "Var", "name": "i"}}, "index": {"node": "Var", "name": "j"}}, "value": {"node": "Var", "name": "v"}}, {"node": "SimpleAssign", "target": "b", "value": {"node": "Var", "name": "a"}}]}}], "formulas": []}
+    },
+    {
+      "name": "module: tuple assignment from multi-return call",
+      "kind": "module",
+      "input": "function g(p: int) returns x: int, y: int { x, y = f(1, 2); }",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "g", "params": [{"node": "VariableDef", "name": "p", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "x", "type": "int"}, {"node": "VariableDef", "name": "y", "type": "int"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": [{"node": "TupleAssign", "targets": ["x", "y"], "call": {"node": "Call", "name": "f", "args": [{"node": "IntLiteral", "value": 1}, {"node": "IntLiteral", "value": 2}]}}]}}], "formulas": []}
+    },
+    {
+      "name": "module: assert and assume statements",
+      "kind": "module",
+      "input": "function f(x: int) returns r: int { assume x >= 0; assert x >= 0; r = x; }",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "f", "params": [{"node": "VariableDef", "name": "x", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "r", "type": "int"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": [{"node": "Assume", "predicate": {"node": "BinOp", "op": ">=", "left": {"node": "Var", "name": "x"}, "right": {"node": "IntLiteral", "value": 0}}}, {"node": "Assert", "predicate": {"node": "BinOp", "op": ">=", "left": {"node": "Var", "name": "x"}, "right": {"node": "IntLiteral", "value": 0}}}, {"node": "SimpleAssign", "target": "r", "value": {"node": "Var", "name": "x"}}]}}], "formulas": []}
+    },
+
+    {
+      "name": "Практика 3, валидный пример: function f(x:int) returns r:int { r = x + 1; }",
+      "kind": "module",
+      "input": "function f(x:int) returns r:int { r = x + 1; }",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "f", "params": [{"node": "VariableDef", "name": "x", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "r", "type": "int"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": [{"node": "SimpleAssign", "target": "r", "value": {"node": "BinOp", "op": "+", "left": {"node": "Var", "name": "x"}, "right": {"node": "IntLiteral", "value": 1}}}]}}], "formulas": []}
+    },
+    {
+      "name": "Практика 3, невалидный пример: пропущенные ';' в if/else -- паника восстанавливается на '}'",
+      "kind": "module_errors",
+      "input": "function f(x: int) returns r: int { if (x > 0) r = 1 else r = 2 }",
+      "expected_error_count": 1,
+      "expected_error_contains": ["SEMICOLON"],
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "f", "params": [{"node": "VariableDef", "name": "x", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "r", "type": "int"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": []}}], "formulas": []}
+    },
+    {
+      "name": "Практика 3, dangling else: внутренний if забирает else, внешний остаётся без else",
+      "kind": "module",
+      "input": "function f(a: int, b: int) returns r: int { if (a > 0) if (b > 0) r = 1; else r = 2; }",
+      "expected_ast": {"node": "Module", "functions": [{"node": "FunctionDef", "name": "f", "params": [{"node": "VariableDef", "name": "a", "type": "int"}, {"node": "VariableDef", "name": "b", "type": "int"}], "requires": null, "returns": [{"node": "VariableDef", "name": "r", "type": "int"}], "ensures": null, "uses": [], "body": {"node": "Block", "statements": [{"node": "If", "condition": {"node": "BinOp", "op": ">", "left": {"node": "Var", "name": "a"}, "right": {"node": "IntLiteral", "value": 0}}, "then_branch": {"node": "If", "condition": {"node": "BinOp", "op": ">", "left": {"node": "Var", "name": "b"}, "right": {"node": "IntLiteral", "value": 0}}, "then_branch": {"node": "SimpleAssign", "target": "r", "value": {"node": "IntLiteral", "value": 1}}, "else_branch": {"node": "SimpleAssign", "target": "r", "value": {"node": "IntLiteral", "value": 2}}}, "else_branch": null}]}}], "formulas": []}
+    },
+
+    {"name": "error: unclosed parenthesis in parameter list", "kind": "error", "input": "function f(x: int returns r: int { r = x; }"},
+    {"name": "error: trailing tokens after a valid program", "kind": "error", "input": "function f() returns r: int { r = 0; } garbage"},
+    {"name": "error: invalid operator (double star)", "kind": "error", "input": "function f() returns r: int { r = 1 ** 2; }"},
+    {"name": "error: empty input", "kind": "error", "input": ""},
+    {"name": "error: missing semicolon after assignment", "kind": "error", "input": "function f() returns r: int { r = 0 }"},
+    {"name": "error: missing returns clause entirely", "kind": "error", "input": "function f() { }"},
+    {"name": "error: garbage tokens, no IDENT anywhere, must not hang", "kind": "error", "input": ") ) ) { { { == == =="},
+    {"name": "error: dangling binary operator with no right operand", "kind": "error", "input": "function f() returns r: int { r = 1 + ; }"},
+    {"name": "error: assignment to array literal index missing closing bracket", "kind": "error", "input": "function f(a: int[], v: int) returns b: int[] { a[0 = v; b = a; }"},
+    {"name": "error: quantifier missing pipe separator", "kind": "error", "input": "function f() returns r: int { r = 0; } p(x: int) => forall(x: int x >= 0);"}
+  ]
+}

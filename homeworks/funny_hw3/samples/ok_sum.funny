@@ -1,0 +1,15 @@
+isNonNeg(x: int) => x >= 0;
+
+function sumArray(a: int[]) returns s: int
+    ensures isNonNeg(s)
+    uses i
+{
+    s = 0;
+    i = 0;
+    while (i < length(a))
+        invariant i >= 0
+    {
+        s = s + a[i];
+        i = i + 1;
+    }
+}

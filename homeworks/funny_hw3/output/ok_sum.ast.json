@@ -1,0 +1,199 @@
+{
+  "node": "Module",
+  "functions": [
+    {
+      "node": "FunctionDef",
+      "name": "sumArray",
+      "params": [
+        {
+          "node": "VariableDef",
+          "name": "a",
+          "type": "int[]",
+          "pos": 47
+        }
+      ],
+      "requires": null,
+      "returns": [
+        {
+          "node": "VariableDef",
+          "name": "s",
+          "type": "int",
+          "pos": 65
+        }
+      ],
+      "ensures": {
+        "node": "Call",
+        "name": "isNonNeg",
+        "args": [
+          {
+            "node": "Var",
+            "name": "s",
+            "pos": 93
+          }
+        ],
+        "pos": 84
+      },
+      "uses": [
+        {
+          "node": "LocalVarDef",
+          "name": "i",
+          "type": null,
+          "pos": 105
+        }
+      ],
+      "body": {
+        "node": "Block",
+        "statements": [
+          {
+            "node": "SimpleAssign",
+            "target": "s",
+            "value": {
+              "node": "IntLiteral",
+              "value": 0,
+              "pos": 117
+            },
+            "pos": 113
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "i",
+            "value": {
+              "node": "IntLiteral",
+              "value": 0,
+              "pos": 128
+            },
+            "pos": 124
+          },
+          {
+            "node": "While",
+            "condition": {
+              "node": "BinOp",
+              "op": "<",
+              "left": {
+                "node": "Var",
+                "name": "i",
+                "pos": 142
+              },
+              "right": {
+                "node": "Call",
+                "name": "length",
+                "args": [
+                  {
+                    "node": "Var",
+                    "name": "a",
+                    "pos": 153
+                  }
+                ],
+                "pos": 146
+              },
+              "pos": 144
+            },
+            "invariant": {
+              "node": "BinOp",
+              "op": ">=",
+              "left": {
+                "node": "Var",
+                "name": "i",
+                "pos": 175
+              },
+              "right": {
+                "node": "IntLiteral",
+                "value": 0,
+                "pos": 180
+              },
+              "pos": 177
+            },
+            "body": {
+              "node": "Block",
+              "statements": [
+                {
+                  "node": "SimpleAssign",
+                  "target": "s",
+                  "value": {
+                    "node": "BinOp",
+                    "op": "+",
+                    "left": {
+                      "node": "Var",
+                      "name": "s",
+                      "pos": 200
+                    },
+                    "right": {
+                      "node": "ArrayAccess",
+                      "base": {
+                        "node": "Var",
+                        "name": "a",
+                        "pos": 204
+                      },
+                      "index": {
+                        "node": "Var",
+                        "name": "i",
+                        "pos": 206
+                      },
+                      "pos": 204
+                    },
+                    "pos": 202
+                  },
+                  "pos": 196
+                },
+                {
+                  "node": "SimpleAssign",
+                  "target": "i",
+                  "value": {
+                    "node": "BinOp",
+                    "op": "+",
+                    "left": {
+                      "node": "Var",
+                      "name": "i",
+                      "pos": 222
+                    },
+                    "right": {
+                      "node": "IntLiteral",
+                      "value": 1,
+                      "pos": 226
+                    },
+                    "pos": 224
+                  },
+                  "pos": 218
+                }
+              ],
+              "pos": 186
+            },
+            "pos": 135
+          }
+        ],
+        "pos": 107
+      },
+      "pos": 38
+    }
+  ],
+  "formulas": [
+    {
+      "node": "FormulaDef",
+      "name": "isNonNeg",
+      "params": [
+        {
+          "node": "VariableDef",
+          "name": "x",
+          "type": "int",
+          "pos": 9
+        }
+      ],
+      "body": {
+        "node": "BinOp",
+        "op": ">=",
+        "left": {
+          "node": "Var",
+          "name": "x",
+          "pos": 20
+        },
+        "right": {
+          "node": "IntLiteral",
+          "value": 0,
+          "pos": 25
+        },
+        "pos": 22
+      },
+      "pos": 0
+    }
+  ]
+}

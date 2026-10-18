@@ -1,0 +1,8 @@
+function f(x: int, a: int[]) returns r: int uses t {
+    r = a;
+    if (x) { r = 1; }
+    x = 5;
+    r = unknown + 1;
+    t = x;
+    t = a;
+}

@@ -1,0 +1,779 @@
+{
+ "tests": [
+  {
+   "name": "ok: тождественная функция",
+   "kind": "ok",
+   "input": "function id(x: int) returns r: int { r = x; }"
+  },
+  {
+   "name": "ok: if/else и сравнение",
+   "kind": "ok",
+   "input": "function max(a: int, b: int) returns r: int { if (a >= b) { r = a; } else { r = b; } }"
+  },
+  {
+   "name": "ok: while с инвариантом",
+   "kind": "ok",
+   "input": "function sum(n: int) returns s: int uses i { s = 0; i = 0; while (i < n) invariant s >= 0 { i = i + 1; s = s + i; } }"
+  },
+  {
+   "name": "ok: массивы, length и индексация",
+   "kind": "ok",
+   "input": "function first(a: int[]) requires length(a) > 0 returns r: int { r = a[0]; }"
+  },
+  {
+   "name": "ok: вывод int для локальной",
+   "kind": "ok",
+   "input": "function f(x: int) returns r: int uses t { t = x + 1; r = t * 2; }",
+   "expected_locals": {
+    "f": {
+     "t": "int"
+    }
+   }
+  },
+  {
+   "name": "ok: вывод int[] из присваивания массива",
+   "kind": "ok",
+   "input": "function f(a: int[]) returns r: int uses t { t = a; r = t[0]; }",
+   "expected_locals": {
+    "f": {
+     "t": "int[]"
+    }
+   }
+  },
+  {
+   "name": "ok: вывод int[] из t[i] = v",
+   "kind": "ok",
+   "input": "function f(v: int) returns r: int uses t { t[0] = v; r = t[0]; }",
+   "expected_locals": {
+    "f": {
+     "t": "int[]"
+    }
+   }
+  },
+  {
+   "name": "ok: явный тип локальной",
+   "kind": "ok",
+   "input": "function f(x: int) returns r: int uses t: int { t = x; r = t; }",
+   "expected_locals": {
+    "f": {
+     "t": "int"
+    }
+   }
+  },
+  {
+   "name": "ok: присваивание кортежа",
+   "kind": "ok",
+   "input": "function two(x: int) returns a: int, b: int { a = x; b = x + 1; }\nfunction g(x: int) returns r: int uses p, q { p, q = two(x); r = p + q; }",
+   "expected_locals": {
+    "g": {
+     "p": "int",
+     "q": "int"
+    }
+   }
+  },
+  {
+   "name": "ok: формула и квантор в ensures",
+   "kind": "ok",
+   "input": "isNonNeg(x: int) => x >= 0;\nfunction f(a: int[]) returns r: int ensures isNonNeg(r) and forall(i: int | i >= 0 and i < length(a) -> a[i] >= 0) { r = 0; }"
+  },
+  {
+   "name": "ok: рекурсия и вызов функции, определённой ниже",
+   "kind": "ok",
+   "input": "function fact(n: int) returns r: int { if (n <= 1) { r = 1; } else { r = n * fact(n - 1); } }\nfunction h(x: int) returns r: int { r = later(x); }\nfunction later(x: int) returns r: int { r = x; }"
+  },
+  {
+   "name": "ok: assert/assume и логика",
+   "kind": "ok",
+   "input": "function f(x: int) returns r: int { assume x >= 0 and not (x > 100); assert x >= 0 -> true; r = x; }"
+  },
+  {
+   "name": "ok: массив-результат и копирование",
+   "kind": "ok",
+   "input": "function copy(a: int[]) returns b: int[] { b = a; b[0] = 1; }"
+  },
+  {
+   "name": "annotated: типы выражений и вывод локальной",
+   "kind": "annotated",
+   "input": "function f(a: int[], x: int) returns r: int uses t { t = a; r = t[0] + x; }",
+   "expected_ast": {
+    "node": "Module",
+    "functions": [
+     {
+      "node": "FunctionDef",
+      "name": "f",
+      "params": [
+       {
+        "node": "VariableDef",
+        "name": "a",
+        "type": "int[]"
+       },
+       {
+        "node": "VariableDef",
+        "name": "x",
+        "type": "int"
+       }
+      ],
+      "requires": null,
+      "returns": [
+       {
+        "node": "VariableDef",
+        "name": "r",
+        "type": "int"
+       }
+      ],
+      "ensures": null,
+      "uses": [
+       {
+        "node": "LocalVarDef",
+        "name": "t",
+        "type": null,
+        "ty": "int[]"
+       }
+      ],
+      "body": {
+       "node": "Block",
+       "statements": [
+        {
+         "node": "SimpleAssign",
+         "target": "t",
+         "value": {
+          "node": "Var",
+          "name": "a",
+          "ty": "int[]"
+         }
+        },
+        {
+         "node": "SimpleAssign",
+         "target": "r",
+         "value": {
+          "node": "BinOp",
+          "op": "+",
+          "left": {
+           "node": "ArrayAccess",
+           "base": {
+            "node": "Var",
+            "name": "t",
+            "ty": "int[]"
+           },
+           "index": {
+            "node": "IntLiteral",
+            "value": 0,
+            "ty": "int"
+           },
+           "ty": "int"
+          },
+          "right": {
+           "node": "Var",
+           "name": "x",
+           "ty": "int"
+          },
+          "ty": "int"
+         }
+        }
+       ]
+      },
+      "symbols": [
+       {
+        "name": "a",
+        "kind": "param",
+        "type": "int[]",
+        "declared": true
+       },
+       {
+        "name": "x",
+        "kind": "param",
+        "type": "int",
+        "declared": true
+       },
+       {
+        "name": "r",
+        "kind": "return",
+        "type": "int",
+        "declared": true
+       },
+       {
+        "name": "t",
+        "kind": "local",
+        "type": "int[]",
+        "declared": false
+       }
+      ]
+     }
+    ],
+    "formulas": []
+   }
+  },
+  {
+   "name": "annotated: формула с логикой",
+   "kind": "annotated",
+   "input": "p(x: int) => x > 0 and x < 10;",
+   "expected_ast": {
+    "node": "Module",
+    "functions": [],
+    "formulas": [
+     {
+      "node": "FormulaDef",
+      "name": "p",
+      "params": [
+       {
+        "node": "VariableDef",
+        "name": "x",
+        "type": "int"
+       }
+      ],
+      "body": {
+       "node": "BinOp",
+       "op": "and",
+       "left": {
+        "node": "BinOp",
+        "op": ">",
+        "left": {
+         "node": "Var",
+         "name": "x",
+         "ty": "int"
+        },
+        "right": {
+         "node": "IntLiteral",
+         "value": 0,
+         "ty": "int"
+        },
+        "ty": "bool"
+       },
+       "right": {
+        "node": "BinOp",
+        "op": "<",
+        "left": {
+         "node": "Var",
+         "name": "x",
+         "ty": "int"
+        },
+        "right": {
+         "node": "IntLiteral",
+         "value": 10,
+         "ty": "int"
+        },
+        "ty": "bool"
+       },
+       "ty": "bool"
+      },
+      "symbols": [
+       {
+        "name": "x",
+        "kind": "param",
+        "type": "int",
+        "declared": true
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "err: неизвестная переменная",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { r = y; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 41,
+     "contains": "неизвестное имя 'y'"
+    }
+   ]
+  },
+  {
+   "name": "err: неизвестная функция",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { r = g(x); }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 41,
+     "contains": "неизвестная функция"
+    }
+   ]
+  },
+  {
+   "name": "err: повторное определение функции",
+   "kind": "error",
+   "input": "function f() returns r: int { r = 1; }\nfunction f() returns r: int { r = 2; }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 10,
+     "contains": "повторное определение 'f'"
+    }
+   ]
+  },
+  {
+   "name": "err: повторный параметр",
+   "kind": "error",
+   "input": "function f(x: int, x: int) returns r: int { r = x; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 20,
+     "contains": "повторное объявление 'x'"
+    }
+   ]
+  },
+  {
+   "name": "err: локальная повторяет параметр",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int uses x { r = 1; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 40,
+     "contains": "повторное объявление 'x'"
+    }
+   ]
+  },
+  {
+   "name": "err: присваивание параметру",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { x = 1; r = x; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 37,
+     "contains": "доступен только для чтения"
+    }
+   ]
+  },
+  {
+   "name": "err: присваивание элементу параметра-массива",
+   "kind": "error",
+   "input": "function f(a: int[]) returns r: int { a[0] = 1; r = 0; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 39,
+     "contains": "параметр-массив 'a'"
+    }
+   ]
+  },
+  {
+   "name": "err: int присваивается массиву",
+   "kind": "error",
+   "input": "function f(a: int[]) returns r: int { r = a; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 43,
+     "contains": "несовместимые типы"
+    }
+   ]
+  },
+  {
+   "name": "err: массив присваивается int-локальной (явной)",
+   "kind": "error",
+   "input": "function f(a: int[]) returns r: int uses t: int { t = a; r = 0; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 55,
+     "contains": "несовместимые типы"
+    }
+   ]
+  },
+  {
+   "name": "err: if с условием int",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { if (x) { r = 1; } }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 41,
+     "contains": "условие if: ожидался bool, получен int"
+    }
+   ]
+  },
+  {
+   "name": "err: while с условием int",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { while (x + 1) { r = 1; } }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 44,
+     "contains": "условие while: ожидался bool, получен int"
+    }
+   ]
+  },
+  {
+   "name": "err: арифметика над массивом",
+   "kind": "error",
+   "input": "function f(a: int[]) returns r: int { r = a + 1; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 43,
+     "contains": "ожидался int, получен int[]"
+    }
+   ]
+  },
+  {
+   "name": "err: сравнение массивов",
+   "kind": "error",
+   "input": "function f(a: int[], b: int[]) returns r: int { if (a == b) { r = 1; } }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 53,
+     "contains": "ожидался int, получен int[]"
+    },
+    {
+     "line": 1,
+     "col": 58,
+     "contains": "ожидался int, получен int[]"
+    }
+   ]
+  },
+  {
+   "name": "err: неверное число аргументов",
+   "kind": "error",
+   "input": "function g(x: int) returns r: int { r = x; }\nfunction f() returns r: int { r = g(1, 2); }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 35,
+     "contains": "ожидает аргументов: 1, передано: 2"
+    }
+   ]
+  },
+  {
+   "name": "err: неверный тип аргумента",
+   "kind": "error",
+   "input": "function g(x: int) returns r: int { r = x; }\nfunction f(a: int[]) returns r: int { r = g(a); }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 45,
+     "contains": "аргумент 1 вызова 'g': ожидался int, получен int[]"
+    }
+   ]
+  },
+  {
+   "name": "err: length от int",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { r = length(x); }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 48,
+     "contains": "аргумент 1 вызова 'length'"
+    }
+   ]
+  },
+  {
+   "name": "err: формула в арифметике",
+   "kind": "error",
+   "input": "p(x: int) => x > 0;\nfunction f(x: int) returns r: int { r = p(x) + 1; }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 41,
+     "contains": "можно использовать только в предикате"
+    }
+   ]
+  },
+  {
+   "name": "err: формула в условии if",
+   "kind": "error",
+   "input": "p(x: int) => x > 0;\nfunction f(x: int) returns r: int { if (p(x)) { r = 1; } }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 41,
+     "contains": "можно использовать только в предикате"
+    }
+   ]
+  },
+  {
+   "name": "err: квантор в условии while",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { while (forall(i: int | i > 0)) { r = 1; } }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 44,
+     "contains": "кванторы forall/exists допустимы только в предикатах"
+    }
+   ]
+  },
+  {
+   "name": "err: функция с двумя результатами в выражении",
+   "kind": "error",
+   "input": "function two(x: int) returns a: int, b: int { a = x; b = x; }\nfunction f(x: int) returns r: int { r = two(x); }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 41,
+     "contains": "возвращает значений: 2"
+    }
+   ]
+  },
+  {
+   "name": "err: кортеж, число переменных не совпало",
+   "kind": "error",
+   "input": "function two(x: int) returns a: int, b: int { a = x; b = x; }\nfunction f(x: int) returns r: int uses p, q, w { p, q, w = two(x); r = p; }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 50,
+     "contains": "слева указано переменных: 3"
+    }
+   ]
+  },
+  {
+   "name": "err: кортеж, тип результата не совпал",
+   "kind": "error",
+   "input": "function two(x: int) returns a: int, b: int[] { a = x; b[0] = 1; }\nfunction f(x: int) returns r: int uses p: int, q: int { p, q = two(x); r = p; }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 57,
+     "contains": "несовместимые типы"
+    }
+   ]
+  },
+  {
+   "name": "err: индексирование int",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { r = x[0]; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 41,
+     "contains": "индексировать можно только int[]"
+    }
+   ]
+  },
+  {
+   "name": "err: индекс не int",
+   "kind": "error",
+   "input": "function f(a: int[], b: int[]) returns r: int { r = a[b]; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 55,
+     "contains": "индекс массива: ожидался int, получен int[]"
+    }
+   ]
+  },
+  {
+   "name": "err: двумерная индексация",
+   "kind": "error",
+   "input": "function f(a: int[]) returns r: int { r = a[0][1]; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 43,
+     "contains": "многомерные массивы не поддерживаются"
+    }
+   ]
+  },
+  {
+   "name": "err: bool присваивается переменной",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { r = x > 0; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 41,
+     "contains": "нет переменных типа bool"
+    }
+   ]
+  },
+  {
+   "name": "err: противоречивый вывод типа",
+   "kind": "error",
+   "input": "function f(a: int[]) returns r: int uses t { t = 1; t = a; r = t; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 57,
+     "contains": "тип выведен из первого присваивания"
+    }
+   ]
+  },
+  {
+   "name": "err: тип локальной не выводится",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int uses t { r = x; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 40,
+     "contains": "не удалось вывести тип"
+    }
+   ]
+  },
+  {
+   "name": "err: чтение локальной до присваивания",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int uses t { r = t; t = x; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 48,
+     "contains": "используется до первого присваивания"
+    }
+   ]
+  },
+  {
+   "name": "err: requires видит возвращаемое значение",
+   "kind": "error",
+   "input": "function f(x: int) requires r > 0 returns r: int { r = x; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 29,
+     "contains": "недоступно в requires"
+    }
+   ]
+  },
+  {
+   "name": "err: ensures с неизвестным именем",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int ensures r == zzz { r = x; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 48,
+     "contains": "неизвестное имя 'zzz'"
+    }
+   ]
+  },
+  {
+   "name": "err: квантор затеняет параметр",
+   "kind": "error",
+   "input": "function f(x: int) requires forall(x: int | x > 0) returns r: int { r = 1; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 36,
+     "contains": "уже используется"
+    }
+   ]
+  },
+  {
+   "name": "err: тело квантора не bool",
+   "kind": "error",
+   "input": "function f(x: int) requires forall(i: int | i + 1) returns r: int { r = 1; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 45,
+     "contains": "тело квантора: ожидался bool"
+    }
+   ]
+  },
+  {
+   "name": "err: requires не bool",
+   "kind": "error",
+   "input": "function f(x: int) requires x + 1 returns r: int { r = 1; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 29,
+     "contains": "условие requires: ожидался bool"
+    }
+   ]
+  },
+  {
+   "name": "err: присваивание неизвестной переменной",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { zz = x; r = x; }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 37,
+     "contains": "неизвестное имя 'zz'"
+    }
+   ]
+  },
+  {
+   "name": "err: not от int",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { if (not x) { r = 1; } }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 45,
+     "contains": "операнд 'not'"
+    }
+   ]
+  },
+  {
+   "name": "err: and с int-операндом",
+   "kind": "error",
+   "input": "function f(x: int) returns r: int { if (x > 0 and x) { r = 1; } }",
+   "expected_errors": [
+    {
+     "line": 1,
+     "col": 51,
+     "contains": "правый операнд 'and'"
+    }
+   ]
+  },
+  {
+   "name": "err: повтор в левой части кортежа",
+   "kind": "error",
+   "input": "function two(x: int) returns a: int, b: int { a = x; b = x; }\nfunction f(x: int) returns r: int uses p { p, p = two(x); r = p; }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 44,
+     "contains": "повторяется в левой части"
+    }
+   ]
+  },
+  {
+   "name": "err: формула как источник кортежа",
+   "kind": "error",
+   "input": "p(x: int) => x > 0;\nfunction f(x: int) returns r: int uses a, b { a, b = p(x); r = 1; }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 54,
+     "contains": "формула"
+    }
+   ]
+  },
+  {
+   "name": "err: несколько независимых ошибок подряд",
+   "kind": "error",
+   "input": "function f(x: int, a: int[]) returns r: int {\n  r = a;\n  if (x) { r = 1; }\n  r = q;\n}",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 7,
+     "contains": "несовместимые типы"
+    },
+    {
+     "line": 3,
+     "col": 7,
+     "contains": "условие if"
+    },
+    {
+     "line": 4,
+     "col": 7,
+     "contains": "неизвестное имя 'q'"
+    }
+   ]
+  },
+  {
+   "name": "err: повторная формула и функция с одним именем",
+   "kind": "error",
+   "input": "p(x: int) => x > 0;\nfunction p(x: int) returns r: int { r = x; }",
+   "expected_errors": [
+    {
+     "line": 2,
+     "col": 10,
+     "contains": "повторное определение 'p'"
+    }
+   ]
+  }
+ ]
+}
