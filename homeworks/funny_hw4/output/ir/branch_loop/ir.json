@@ -1,0 +1,1471 @@
+{
+  "optimizations": [
+    "constprop",
+    "algebra",
+    "dce"
+  ],
+  "before": {
+    "functions": [
+      {
+        "name": "classify",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          },
+          {
+            "name": "%t4",
+            "type": "int"
+          },
+          {
+            "name": "%t5",
+            "type": "int"
+          },
+          {
+            "name": "%t6",
+            "type": "int"
+          },
+          {
+            "name": "%t7",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "x",
+                  0
+                ],
+                "operator": ">"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "%t2"
+                ]
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L1",
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L1",
+              "L2"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "x",
+                  100
+                ],
+                "operator": "<"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "%t3"
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L3",
+                  "L5"
+                ]
+              }
+            ],
+            "succs": [
+              "L3",
+              "L5"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  1
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L4"
+                ]
+              }
+            ],
+            "succs": [
+              "L4"
+            ]
+          },
+          {
+            "label": "L5",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t5"
+                ],
+                "args": [
+                  "x",
+                  0
+                ],
+                "operator": "=="
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  "%t5"
+                ]
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t4"
+                ],
+                "targets": [
+                  "L7",
+                  "L6"
+                ]
+              }
+            ],
+            "succs": [
+              "L7",
+              "L6"
+            ]
+          },
+          {
+            "label": "L6",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t6"
+                ],
+                "args": [
+                  0,
+                  100
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t7"
+                ],
+                "args": [
+                  "x",
+                  "%t6"
+                ],
+                "operator": "<"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  "%t7"
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L7"
+                ]
+              }
+            ],
+            "succs": [
+              "L7"
+            ]
+          },
+          {
+            "label": "L7",
+            "instrs": [
+              {
+                "op": "br",
+                "args": [
+                  "%t4"
+                ],
+                "targets": [
+                  "L8",
+                  "L10"
+                ]
+              }
+            ],
+            "succs": [
+              "L8",
+              "L10"
+            ]
+          },
+          {
+            "label": "L8",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  2
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L9"
+                ]
+              }
+            ],
+            "succs": [
+              "L9"
+            ]
+          },
+          {
+            "label": "L10",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  3
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L9"
+                ]
+              }
+            ],
+            "succs": [
+              "L9"
+            ]
+          },
+          {
+            "label": "L9",
+            "instrs": [
+              {
+                "op": "jump",
+                "targets": [
+                  "L4"
+                ]
+              }
+            ],
+            "succs": [
+              "L4"
+            ]
+          },
+          {
+            "label": "L4",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "sumTo",
+        "params": [
+          {
+            "name": "n",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "s",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "i",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  1
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "i",
+                  "n"
+                ],
+                "operator": "<="
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L2",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L2",
+              "L3"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  "s",
+                  "i"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  "i",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "s"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "scaled",
+        "params": [
+          {
+            "name": "n",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "s",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "i",
+            "type": "int"
+          },
+          {
+            "name": "k",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          },
+          {
+            "name": "%t4",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "k"
+                ],
+                "args": [
+                  2,
+                  3
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "i",
+                  "n"
+                ],
+                "operator": "<"
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L2",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L2",
+              "L3"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "i",
+                  "k"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "s",
+                  "%t2"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  1,
+                  1
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  "%t3",
+                  "%t4"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  "i",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "s"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      }
+    ]
+  },
+  "after": {
+    "functions": [
+      {
+        "name": "classify",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          },
+          {
+            "name": "%t4",
+            "type": "int"
+          },
+          {
+            "name": "%t5",
+            "type": "int"
+          },
+          {
+            "name": "%t7",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "x",
+                  0
+                ],
+                "operator": ">"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "%t2"
+                ]
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L1",
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L1",
+              "L2"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "x",
+                  100
+                ],
+                "operator": "<"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "%t3"
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L3",
+                  "L5"
+                ]
+              }
+            ],
+            "succs": [
+              "L3",
+              "L5"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  1
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L4"
+                ]
+              }
+            ],
+            "succs": [
+              "L4"
+            ]
+          },
+          {
+            "label": "L5",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t5"
+                ],
+                "args": [
+                  "x",
+                  0
+                ],
+                "operator": "=="
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  "%t5"
+                ]
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t4"
+                ],
+                "targets": [
+                  "L7",
+                  "L6"
+                ]
+              }
+            ],
+            "succs": [
+              "L7",
+              "L6"
+            ]
+          },
+          {
+            "label": "L6",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t7"
+                ],
+                "args": [
+                  "x",
+                  -100
+                ],
+                "operator": "<"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  "%t7"
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L7"
+                ]
+              }
+            ],
+            "succs": [
+              "L7"
+            ]
+          },
+          {
+            "label": "L7",
+            "instrs": [
+              {
+                "op": "br",
+                "args": [
+                  "%t4"
+                ],
+                "targets": [
+                  "L8",
+                  "L10"
+                ]
+              }
+            ],
+            "succs": [
+              "L8",
+              "L10"
+            ]
+          },
+          {
+            "label": "L8",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  2
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L9"
+                ]
+              }
+            ],
+            "succs": [
+              "L9"
+            ]
+          },
+          {
+            "label": "L10",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  3
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L9"
+                ]
+              }
+            ],
+            "succs": [
+              "L9"
+            ]
+          },
+          {
+            "label": "L9",
+            "instrs": [
+              {
+                "op": "jump",
+                "targets": [
+                  "L4"
+                ]
+              }
+            ],
+            "succs": [
+              "L4"
+            ]
+          },
+          {
+            "label": "L4",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "sumTo",
+        "params": [
+          {
+            "name": "n",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "s",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "i",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  1
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "i",
+                  "n"
+                ],
+                "operator": "<="
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L2",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L2",
+              "L3"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  "s",
+                  "i"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  "i",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "s"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "scaled",
+        "params": [
+          {
+            "name": "n",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "s",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "i",
+            "type": "int"
+          },
+          {
+            "name": "k",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "k"
+                ],
+                "args": [
+                  6
+                ]
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "i",
+                  "n"
+                ],
+                "operator": "<"
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L2",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L2",
+              "L3"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "i",
+                  "k"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "s",
+                  "%t2"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  "%t3"
+                ]
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  "i",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "s"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      }
+    ]
+  },
+  "metrics": {
+    "before": {
+      "classify": {
+        "blocks": 11,
+        "instrs": 23,
+        "temps": 7,
+        "colors": 1
+      },
+      "sumTo": {
+        "blocks": 4,
+        "instrs": 9,
+        "temps": 1,
+        "colors": 1
+      },
+      "scaled": {
+        "blocks": 4,
+        "instrs": 13,
+        "temps": 4,
+        "colors": 2
+      }
+    },
+    "after": {
+      "classify": {
+        "blocks": 11,
+        "instrs": 22,
+        "temps": 6,
+        "colors": 1
+      },
+      "sumTo": {
+        "blocks": 4,
+        "instrs": 9,
+        "temps": 1,
+        "colors": 1
+      },
+      "scaled": {
+        "blocks": 4,
+        "instrs": 12,
+        "temps": 3,
+        "colors": 1
+      }
+    }
+  },
+  "coloring": {
+    "before": {
+      "classify": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": [],
+          "%t4": [],
+          "%t5": [],
+          "%t6": [],
+          "%t7": []
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0,
+          "%t4": 0,
+          "%t5": 0,
+          "%t6": 0,
+          "%t7": 0
+        },
+        "color_count": 1
+      },
+      "sumTo": {
+        "graph": {
+          "%t1": []
+        },
+        "colors": {
+          "%t1": 0
+        },
+        "color_count": 1
+      },
+      "scaled": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": [
+            "%t4"
+          ],
+          "%t4": [
+            "%t3"
+          ]
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0,
+          "%t4": 1
+        },
+        "color_count": 2
+      }
+    },
+    "after": {
+      "classify": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": [],
+          "%t4": [],
+          "%t5": [],
+          "%t7": []
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0,
+          "%t4": 0,
+          "%t5": 0,
+          "%t7": 0
+        },
+        "color_count": 1
+      },
+      "sumTo": {
+        "graph": {
+          "%t1": []
+        },
+        "colors": {
+          "%t1": 0
+        },
+        "color_count": 1
+      },
+      "scaled": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": []
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0
+        },
+        "color_count": 1
+      }
+    }
+  }
+}

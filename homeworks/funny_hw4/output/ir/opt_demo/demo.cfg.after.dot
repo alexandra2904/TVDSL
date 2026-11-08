@@ -1,0 +1,4 @@
+digraph "demo" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|%t2 = x\l%t3 = %t2 + 14\lr = %t3\lret r\l}"];
+}

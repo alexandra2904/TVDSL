@@ -1,0 +1,3 @@
+graph "constCond_interference" {
+  node [style=filled, fontname=Courier];
+}

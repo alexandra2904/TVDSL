@@ -1,0 +1,74 @@
+function classify(x: int) returns (r: int)
+  temps: %t1: int, %t2: int, %t3: int, %t4: int, %t5: int, %t6: int, %t7: int
+entry:    ; -> L1, L2
+    %t2 = x > 0
+    %t1 = %t2
+    br %t1, L1, L2
+L1:    ; -> L2
+    %t3 = x < 100
+    %t1 = %t3
+    jump L2
+L2:    ; -> L3, L5
+    br %t1, L3, L5
+L3:    ; -> L4
+    r = 1
+    jump L4
+L5:    ; -> L7, L6
+    %t5 = x == 0
+    %t4 = %t5
+    br %t4, L7, L6
+L6:    ; -> L7
+    %t6 = 0 - 100
+    %t7 = x < %t6
+    %t4 = %t7
+    jump L7
+L7:    ; -> L8, L10
+    br %t4, L8, L10
+L8:    ; -> L9
+    r = 2
+    jump L9
+L10:    ; -> L9
+    r = 3
+    jump L9
+L9:    ; -> L4
+    jump L4
+L4:    ; -> (выход)
+    ret r
+
+function sumTo(n: int) returns (s: int)
+  locals: i: int
+  temps: %t1: int
+entry:    ; -> L1
+    s = 0
+    i = 1
+    jump L1
+L1:    ; -> L2, L3
+    %t1 = i <= n
+    br %t1, L2, L3
+L2:    ; -> L1
+    s = s + i
+    i = i + 1
+    jump L1
+L3:    ; -> (выход)
+    ret s
+
+function scaled(n: int) returns (s: int)
+  locals: i: int, k: int
+  temps: %t1: int, %t2: int, %t3: int, %t4: int
+entry:    ; -> L1
+    k = 2 * 3
+    s = 0
+    i = 0
+    jump L1
+L1:    ; -> L2, L3
+    %t1 = i < n
+    br %t1, L2, L3
+L2:    ; -> L1
+    %t2 = i * k
+    %t3 = s + %t2
+    %t4 = 1 - 1
+    s = %t3 + %t4
+    i = i + 1
+    jump L1
+L3:    ; -> (выход)
+    ret s

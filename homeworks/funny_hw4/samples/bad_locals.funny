@@ -1,0 +1,16 @@
+// demo of local type inference (bonus): good and bad cases in one function
+function demo(a: int[], x: int) returns r: int
+    uses okInt, okArr, clash, never, early, flag
+{
+    okInt = x + 1;
+    okArr[0] = x;
+    r = okInt + okArr[0];
+
+    clash = 1;
+    clash = a;
+
+    r = early;
+    early = x;
+
+    flag = x > 0;
+}

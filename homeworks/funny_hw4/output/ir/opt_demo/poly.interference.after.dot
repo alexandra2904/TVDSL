@@ -1,0 +1,16 @@
+graph "poly_interference" {
+  node [style=filled, fontname=Courier];
+  "%t1" [label="%t1\ncolor 0", fillcolor=lightblue];
+  "%t2" [label="%t2\ncolor 1", fillcolor=lightgreen];
+  "%t3" [label="%t3\ncolor 0", fillcolor=lightblue];
+  "%t4" [label="%t4\ncolor 1", fillcolor=lightgreen];
+  "%t5" [label="%t5\ncolor 1", fillcolor=lightgreen];
+  "%t6" [label="%t6\ncolor 2", fillcolor=khaki];
+  "%t7" [label="%t7\ncolor 1", fillcolor=lightgreen];
+  "%t1" -- "%t2";
+  "%t3" -- "%t4";
+  "%t3" -- "%t5";
+  "%t3" -- "%t6";
+  "%t3" -- "%t7";
+  "%t5" -- "%t6";
+}

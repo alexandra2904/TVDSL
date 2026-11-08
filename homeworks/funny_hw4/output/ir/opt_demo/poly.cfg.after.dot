@@ -1,0 +1,4 @@
+digraph "poly" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|%t1 = x + y\l%t2 = x - y\l%t3 = %t1 * %t2\l%t4 = x * 2\l%t5 = %t4 + y\l%t6 = y + 1\l%t7 = %t5 * %t6\lr = %t3 + %t7\lret r\l}"];
+}

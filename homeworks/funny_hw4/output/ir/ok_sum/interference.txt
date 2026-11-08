@@ -1,0 +1,21 @@
+##### before
+interference graph of sumArray:
+  %t1 (int) -- -
+  %t2 (int) -- -
+  %t3 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 0
+  %t3 -> color 0
+colors: 1
+
+##### after
+interference graph of sumArray:
+  %t1 (int) -- -
+  %t2 (int) -- -
+  %t3 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 0
+  %t3 -> color 0
+colors: 1

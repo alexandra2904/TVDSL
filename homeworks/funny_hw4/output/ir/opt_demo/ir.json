@@ -1,0 +1,915 @@
+{
+  "optimizations": [
+    "constprop",
+    "algebra",
+    "dce"
+  ],
+  "before": {
+    "functions": [
+      {
+        "name": "demo",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "a",
+            "type": "int"
+          },
+          {
+            "name": "b",
+            "type": "int"
+          },
+          {
+            "name": "dead",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          },
+          {
+            "name": "%t4",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  3,
+                  4
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "a"
+                ],
+                "args": [
+                  2,
+                  "%t1"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "b"
+                ],
+                "args": [
+                  "a",
+                  0
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "dead"
+                ],
+                "args": [
+                  "x",
+                  10
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "x",
+                  1
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "%t2",
+                  "b"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "%t3",
+                  0
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  0,
+                  "x"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "r",
+                  "%t4"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "poly",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          },
+          {
+            "name": "%t4",
+            "type": "int"
+          },
+          {
+            "name": "%t5",
+            "type": "int"
+          },
+          {
+            "name": "%t6",
+            "type": "int"
+          },
+          {
+            "name": "%t7",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "x",
+                  "y"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "x",
+                  "y"
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "%t1",
+                  "%t2"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  "x",
+                  2
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t5"
+                ],
+                "args": [
+                  "%t4",
+                  "y"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t6"
+                ],
+                "args": [
+                  "y",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t7"
+                ],
+                "args": [
+                  "%t5",
+                  "%t6"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "%t3",
+                  "%t7"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "constCond",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  2,
+                  1
+                ],
+                "operator": ">"
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L1",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L1",
+              "L3"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "x",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "x",
+                  1
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      }
+    ]
+  },
+  "after": {
+    "functions": [
+      {
+        "name": "demo",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "a",
+            "type": "int"
+          },
+          {
+            "name": "b",
+            "type": "int"
+          },
+          {
+            "name": "dead",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "x"
+                ]
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "%t2",
+                  14
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "%t3"
+                ]
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "poly",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          },
+          {
+            "name": "y",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          },
+          {
+            "name": "%t4",
+            "type": "int"
+          },
+          {
+            "name": "%t5",
+            "type": "int"
+          },
+          {
+            "name": "%t6",
+            "type": "int"
+          },
+          {
+            "name": "%t7",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "x",
+                  "y"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "x",
+                  "y"
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "%t1",
+                  "%t2"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  "x",
+                  2
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t5"
+                ],
+                "args": [
+                  "%t4",
+                  "y"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t6"
+                ],
+                "args": [
+                  "y",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t7"
+                ],
+                "args": [
+                  "%t5",
+                  "%t6"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "%t3",
+                  "%t7"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "constCond",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "x",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      }
+    ]
+  },
+  "metrics": {
+    "before": {
+      "demo": {
+        "blocks": 1,
+        "instrs": 10,
+        "temps": 4,
+        "colors": 1
+      },
+      "poly": {
+        "blocks": 1,
+        "instrs": 9,
+        "temps": 7,
+        "colors": 3
+      },
+      "constCond": {
+        "blocks": 4,
+        "instrs": 7,
+        "temps": 1,
+        "colors": 1
+      }
+    },
+    "after": {
+      "demo": {
+        "blocks": 1,
+        "instrs": 4,
+        "temps": 2,
+        "colors": 1
+      },
+      "poly": {
+        "blocks": 1,
+        "instrs": 9,
+        "temps": 7,
+        "colors": 3
+      },
+      "constCond": {
+        "blocks": 3,
+        "instrs": 4,
+        "temps": 0,
+        "colors": 0
+      }
+    }
+  },
+  "coloring": {
+    "before": {
+      "demo": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": [],
+          "%t4": []
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0,
+          "%t4": 0
+        },
+        "color_count": 1
+      },
+      "poly": {
+        "graph": {
+          "%t1": [
+            "%t2"
+          ],
+          "%t2": [
+            "%t1"
+          ],
+          "%t3": [
+            "%t4",
+            "%t5",
+            "%t6",
+            "%t7"
+          ],
+          "%t4": [
+            "%t3"
+          ],
+          "%t5": [
+            "%t3",
+            "%t6"
+          ],
+          "%t6": [
+            "%t3",
+            "%t5"
+          ],
+          "%t7": [
+            "%t3"
+          ]
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 1,
+          "%t3": 0,
+          "%t4": 1,
+          "%t5": 1,
+          "%t6": 2,
+          "%t7": 1
+        },
+        "color_count": 3
+      },
+      "constCond": {
+        "graph": {
+          "%t1": []
+        },
+        "colors": {
+          "%t1": 0
+        },
+        "color_count": 1
+      }
+    },
+    "after": {
+      "demo": {
+        "graph": {
+          "%t2": [],
+          "%t3": []
+        },
+        "colors": {
+          "%t2": 0,
+          "%t3": 0
+        },
+        "color_count": 1
+      },
+      "poly": {
+        "graph": {
+          "%t1": [
+            "%t2"
+          ],
+          "%t2": [
+            "%t1"
+          ],
+          "%t3": [
+            "%t4",
+            "%t5",
+            "%t6",
+            "%t7"
+          ],
+          "%t4": [
+            "%t3"
+          ],
+          "%t5": [
+            "%t3",
+            "%t6"
+          ],
+          "%t6": [
+            "%t3",
+            "%t5"
+          ],
+          "%t7": [
+            "%t3"
+          ]
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 1,
+          "%t3": 0,
+          "%t4": 1,
+          "%t5": 1,
+          "%t6": 2,
+          "%t7": 1
+        },
+        "color_count": 3
+      },
+      "constCond": {
+        "graph": {},
+        "colors": {},
+        "color_count": 0
+      }
+    }
+  }
+}

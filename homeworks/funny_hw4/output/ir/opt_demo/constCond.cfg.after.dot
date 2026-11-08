@@ -1,0 +1,8 @@
+digraph "constCond" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|jump L1\l}"];
+  "L1" [label="{L1:|r = x + 1\ljump L2\l}"];
+  "L2" [label="{L2:|ret r\l}"];
+  "entry" -> "L1";
+  "L1" -> "L2";
+}

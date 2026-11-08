@@ -1,0 +1,18 @@
+function sumArray(a: int[]) returns (s: int)
+  locals: i: int
+  temps: %t1: int, %t2: int, %t3: int
+entry:    ; -> L1
+    s = 0
+    i = 0
+    jump L1
+L1:    ; -> L2, L3
+    %t1 = length a
+    %t2 = i < %t1
+    br %t2, L2, L3
+L2:    ; -> L1
+    %t3 = a[i]
+    s = s + %t3
+    i = i + 1
+    jump L1
+L3:    ; -> (выход)
+    ret s

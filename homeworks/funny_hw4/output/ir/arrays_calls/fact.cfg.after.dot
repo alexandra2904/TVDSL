@@ -1,0 +1,11 @@
+digraph "fact" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|%t1 = n \<= 1\lbr %t1, L1, L3\l}"];
+  "L1" [label="{L1:|r = 1\ljump L2\l}"];
+  "L3" [label="{L3:|%t2 = n - 1\l%t3 = call fact(%t2)\lr = n * %t3\ljump L2\l}"];
+  "L2" [label="{L2:|ret r\l}"];
+  "entry" -> "L1" [label="true"];
+  "entry" -> "L3" [label="false"];
+  "L1" -> "L2";
+  "L3" -> "L2";
+}

@@ -1,0 +1,211 @@
+{
+  "node": "Module",
+  "functions": [
+    {
+      "node": "FunctionDef",
+      "name": "demo",
+      "params": [
+        {
+          "node": "VariableDef",
+          "name": "a",
+          "type": "int[]",
+          "pos": 90
+        },
+        {
+          "node": "VariableDef",
+          "name": "x",
+          "type": "int",
+          "pos": 100
+        }
+      ],
+      "requires": null,
+      "returns": [
+        {
+          "node": "VariableDef",
+          "name": "r",
+          "type": "int",
+          "pos": 116
+        }
+      ],
+      "ensures": null,
+      "uses": [
+        {
+          "node": "LocalVarDef",
+          "name": "okInt",
+          "type": null,
+          "pos": 132
+        },
+        {
+          "node": "LocalVarDef",
+          "name": "okArr",
+          "type": null,
+          "pos": 139
+        },
+        {
+          "node": "LocalVarDef",
+          "name": "clash",
+          "type": null,
+          "pos": 146
+        },
+        {
+          "node": "LocalVarDef",
+          "name": "never",
+          "type": null,
+          "pos": 153
+        },
+        {
+          "node": "LocalVarDef",
+          "name": "early",
+          "type": null,
+          "pos": 160
+        },
+        {
+          "node": "LocalVarDef",
+          "name": "flag",
+          "type": null,
+          "pos": 167
+        }
+      ],
+      "body": {
+        "node": "Block",
+        "statements": [
+          {
+            "node": "SimpleAssign",
+            "target": "okInt",
+            "value": {
+              "node": "BinOp",
+              "op": "+",
+              "left": {
+                "node": "Var",
+                "name": "x",
+                "pos": 186
+              },
+              "right": {
+                "node": "IntLiteral",
+                "value": 1,
+                "pos": 190
+              },
+              "pos": 188
+            },
+            "pos": 178
+          },
+          {
+            "node": "ArrayAssign",
+            "target": {
+              "node": "ArrayAccess",
+              "base": {
+                "node": "Var",
+                "name": "okArr",
+                "pos": 197
+              },
+              "index": {
+                "node": "IntLiteral",
+                "value": 0,
+                "pos": 203
+              },
+              "pos": 197
+            },
+            "value": {
+              "node": "Var",
+              "name": "x",
+              "pos": 208
+            },
+            "pos": 197
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "r",
+            "value": {
+              "node": "BinOp",
+              "op": "+",
+              "left": {
+                "node": "Var",
+                "name": "okInt",
+                "pos": 219
+              },
+              "right": {
+                "node": "ArrayAccess",
+                "base": {
+                  "node": "Var",
+                  "name": "okArr",
+                  "pos": 227
+                },
+                "index": {
+                  "node": "IntLiteral",
+                  "value": 0,
+                  "pos": 233
+                },
+                "pos": 227
+              },
+              "pos": 225
+            },
+            "pos": 215
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "clash",
+            "value": {
+              "node": "IntLiteral",
+              "value": 1,
+              "pos": 250
+            },
+            "pos": 242
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "clash",
+            "value": {
+              "node": "Var",
+              "name": "a",
+              "pos": 265
+            },
+            "pos": 257
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "r",
+            "value": {
+              "node": "Var",
+              "name": "early",
+              "pos": 277
+            },
+            "pos": 273
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "early",
+            "value": {
+              "node": "Var",
+              "name": "x",
+              "pos": 296
+            },
+            "pos": 288
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "flag",
+            "value": {
+              "node": "BinOp",
+              "op": ">",
+              "left": {
+                "node": "Var",
+                "name": "x",
+                "pos": 311
+              },
+              "right": {
+                "node": "IntLiteral",
+                "value": 0,
+                "pos": 315
+              },
+              "pos": 313
+            },
+            "pos": 304
+          }
+        ],
+        "pos": 172
+      },
+      "pos": 85
+    }
+  ],
+  "formulas": []
+}

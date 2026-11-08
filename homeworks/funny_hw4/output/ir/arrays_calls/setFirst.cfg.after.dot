@@ -1,0 +1,4 @@
+digraph "setFirst" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|b = copy a\lb[0] = v\lret b\l}"];
+}

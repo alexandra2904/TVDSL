@@ -1,0 +1,4 @@
+digraph "demo" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|%t1 = 3 * 4\la = 2 + %t1\lb = a + 0\ldead = x * 10\l%t2 = x * 1\l%t3 = %t2 + b\lr = %t3 - 0\l%t4 = 0 * x\lr = r + %t4\lret r\l}"];
+}

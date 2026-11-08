@@ -1,0 +1,32 @@
+// calls, recursion, tuple results and arrays
+function sq(x: int) returns r: int {
+    r = x * x;
+}
+
+function sumSq(a: int[]) returns s: int uses i {
+    s = 0;
+    i = 0;
+    while (i < length(a)) {
+        s = s + sq(a[i]);
+        i = i + 1;
+    }
+}
+
+function divmod(a: int, b: int) returns q: int, m: int {
+    q = a / b;
+    m = a - q * b;
+}
+
+function useDivmod(a: int, b: int) returns r: int uses q, m {
+    q, m = divmod(a, b);
+    r = q * 10 + m;
+}
+
+function setFirst(a: int[], v: int) returns b: int[] {
+    b = a;
+    b[0] = v;
+}
+
+function fact(n: int) returns r: int {
+    if (n <= 1) { r = 1; } else { r = n * fact(n - 1); }
+}

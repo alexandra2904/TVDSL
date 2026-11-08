@@ -1,0 +1,602 @@
+{
+  "node": "Module",
+  "functions": [
+    {
+      "node": "FunctionDef",
+      "name": "classify",
+      "params": [
+        {
+          "node": "VariableDef",
+          "name": "x",
+          "type": "int",
+          "pos": 65
+        }
+      ],
+      "requires": null,
+      "returns": [
+        {
+          "node": "VariableDef",
+          "name": "r",
+          "type": "int",
+          "pos": 81
+        }
+      ],
+      "ensures": null,
+      "uses": [],
+      "body": {
+        "node": "Block",
+        "statements": [
+          {
+            "node": "If",
+            "condition": {
+              "node": "BinOp",
+              "op": "and",
+              "left": {
+                "node": "BinOp",
+                "op": ">",
+                "left": {
+                  "node": "Var",
+                  "name": "x",
+                  "pos": 98,
+                  "ty": "int"
+                },
+                "right": {
+                  "node": "IntLiteral",
+                  "value": 0,
+                  "pos": 102,
+                  "ty": "int"
+                },
+                "pos": 100,
+                "ty": "bool"
+              },
+              "right": {
+                "node": "BinOp",
+                "op": "<",
+                "left": {
+                  "node": "Var",
+                  "name": "x",
+                  "pos": 108,
+                  "ty": "int"
+                },
+                "right": {
+                  "node": "IntLiteral",
+                  "value": 100,
+                  "pos": 112,
+                  "ty": "int"
+                },
+                "pos": 110,
+                "ty": "bool"
+              },
+              "pos": 104,
+              "ty": "bool"
+            },
+            "then_branch": {
+              "node": "Block",
+              "statements": [
+                {
+                  "node": "SimpleAssign",
+                  "target": "r",
+                  "value": {
+                    "node": "IntLiteral",
+                    "value": 1,
+                    "pos": 131,
+                    "ty": "int"
+                  },
+                  "pos": 127
+                }
+              ],
+              "pos": 117
+            },
+            "else_branch": {
+              "node": "Block",
+              "statements": [
+                {
+                  "node": "If",
+                  "condition": {
+                    "node": "BinOp",
+                    "op": "or",
+                    "left": {
+                      "node": "BinOp",
+                      "op": "==",
+                      "left": {
+                        "node": "Var",
+                        "name": "x",
+                        "pos": 159,
+                        "ty": "int"
+                      },
+                      "right": {
+                        "node": "IntLiteral",
+                        "value": 0,
+                        "pos": 164,
+                        "ty": "int"
+                      },
+                      "pos": 161,
+                      "ty": "bool"
+                    },
+                    "right": {
+                      "node": "BinOp",
+                      "op": "<",
+                      "left": {
+                        "node": "Var",
+                        "name": "x",
+                        "pos": 169,
+                        "ty": "int"
+                      },
+                      "right": {
+                        "node": "BinOp",
+                        "op": "-",
+                        "left": {
+                          "node": "IntLiteral",
+                          "value": 0,
+                          "pos": 173,
+                          "ty": "int"
+                        },
+                        "right": {
+                          "node": "IntLiteral",
+                          "value": 100,
+                          "pos": 177,
+                          "ty": "int"
+                        },
+                        "pos": 175,
+                        "ty": "int"
+                      },
+                      "pos": 171,
+                      "ty": "bool"
+                    },
+                    "pos": 166,
+                    "ty": "bool"
+                  },
+                  "then_branch": {
+                    "node": "Block",
+                    "statements": [
+                      {
+                        "node": "SimpleAssign",
+                        "target": "r",
+                        "value": {
+                          "node": "IntLiteral",
+                          "value": 2,
+                          "pos": 188,
+                          "ty": "int"
+                        },
+                        "pos": 184
+                      }
+                    ],
+                    "pos": 182
+                  },
+                  "else_branch": {
+                    "node": "Block",
+                    "statements": [
+                      {
+                        "node": "SimpleAssign",
+                        "target": "r",
+                        "value": {
+                          "node": "IntLiteral",
+                          "value": 3,
+                          "pos": 204,
+                          "ty": "int"
+                        },
+                        "pos": 200
+                      }
+                    ],
+                    "pos": 198
+                  },
+                  "pos": 155
+                }
+              ],
+              "pos": 145
+            },
+            "pos": 94
+          }
+        ],
+        "pos": 88
+      },
+      "pos": 56,
+      "symbols": [
+        {
+          "name": "x",
+          "kind": "param",
+          "type": "int",
+          "declared": true,
+          "pos": 65
+        },
+        {
+          "name": "r",
+          "kind": "return",
+          "type": "int",
+          "declared": true,
+          "pos": 81
+        }
+      ]
+    },
+    {
+      "node": "FunctionDef",
+      "name": "sumTo",
+      "params": [
+        {
+          "node": "VariableDef",
+          "name": "n",
+          "type": "int",
+          "pos": 233
+        }
+      ],
+      "requires": null,
+      "returns": [
+        {
+          "node": "VariableDef",
+          "name": "s",
+          "type": "int",
+          "pos": 249
+        }
+      ],
+      "ensures": null,
+      "uses": [
+        {
+          "node": "LocalVarDef",
+          "name": "i",
+          "type": null,
+          "pos": 261,
+          "ty": "int"
+        }
+      ],
+      "body": {
+        "node": "Block",
+        "statements": [
+          {
+            "node": "SimpleAssign",
+            "target": "s",
+            "value": {
+              "node": "IntLiteral",
+              "value": 0,
+              "pos": 273,
+              "ty": "int"
+            },
+            "pos": 269
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "i",
+            "value": {
+              "node": "IntLiteral",
+              "value": 1,
+              "pos": 284,
+              "ty": "int"
+            },
+            "pos": 280
+          },
+          {
+            "node": "While",
+            "condition": {
+              "node": "BinOp",
+              "op": "<=",
+              "left": {
+                "node": "Var",
+                "name": "i",
+                "pos": 298,
+                "ty": "int"
+              },
+              "right": {
+                "node": "Var",
+                "name": "n",
+                "pos": 303,
+                "ty": "int"
+              },
+              "pos": 300,
+              "ty": "bool"
+            },
+            "invariant": null,
+            "body": {
+              "node": "Block",
+              "statements": [
+                {
+                  "node": "SimpleAssign",
+                  "target": "s",
+                  "value": {
+                    "node": "BinOp",
+                    "op": "+",
+                    "left": {
+                      "node": "Var",
+                      "name": "s",
+                      "pos": 320,
+                      "ty": "int"
+                    },
+                    "right": {
+                      "node": "Var",
+                      "name": "i",
+                      "pos": 324,
+                      "ty": "int"
+                    },
+                    "pos": 322,
+                    "ty": "int"
+                  },
+                  "pos": 316
+                },
+                {
+                  "node": "SimpleAssign",
+                  "target": "i",
+                  "value": {
+                    "node": "BinOp",
+                    "op": "+",
+                    "left": {
+                      "node": "Var",
+                      "name": "i",
+                      "pos": 339,
+                      "ty": "int"
+                    },
+                    "right": {
+                      "node": "IntLiteral",
+                      "value": 1,
+                      "pos": 343,
+                      "ty": "int"
+                    },
+                    "pos": 341,
+                    "ty": "int"
+                  },
+                  "pos": 335
+                }
+              ],
+              "pos": 306
+            },
+            "pos": 291
+          }
+        ],
+        "pos": 263
+      },
+      "pos": 227,
+      "symbols": [
+        {
+          "name": "n",
+          "kind": "param",
+          "type": "int",
+          "declared": true,
+          "pos": 233
+        },
+        {
+          "name": "s",
+          "kind": "return",
+          "type": "int",
+          "declared": true,
+          "pos": 249
+        },
+        {
+          "name": "i",
+          "kind": "local",
+          "type": "int",
+          "declared": false,
+          "pos": 261
+        }
+      ]
+    },
+    {
+      "node": "FunctionDef",
+      "name": "scaled",
+      "params": [
+        {
+          "node": "VariableDef",
+          "name": "n",
+          "type": "int",
+          "pos": 371
+        }
+      ],
+      "requires": null,
+      "returns": [
+        {
+          "node": "VariableDef",
+          "name": "s",
+          "type": "int",
+          "pos": 387
+        }
+      ],
+      "ensures": null,
+      "uses": [
+        {
+          "node": "LocalVarDef",
+          "name": "i",
+          "type": null,
+          "pos": 399,
+          "ty": "int"
+        },
+        {
+          "node": "LocalVarDef",
+          "name": "k",
+          "type": null,
+          "pos": 402,
+          "ty": "int"
+        }
+      ],
+      "body": {
+        "node": "Block",
+        "statements": [
+          {
+            "node": "SimpleAssign",
+            "target": "k",
+            "value": {
+              "node": "BinOp",
+              "op": "*",
+              "left": {
+                "node": "IntLiteral",
+                "value": 2,
+                "pos": 414,
+                "ty": "int"
+              },
+              "right": {
+                "node": "IntLiteral",
+                "value": 3,
+                "pos": 418,
+                "ty": "int"
+              },
+              "pos": 416,
+              "ty": "int"
+            },
+            "pos": 410
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "s",
+            "value": {
+              "node": "IntLiteral",
+              "value": 0,
+              "pos": 429,
+              "ty": "int"
+            },
+            "pos": 425
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "i",
+            "value": {
+              "node": "IntLiteral",
+              "value": 0,
+              "pos": 440,
+              "ty": "int"
+            },
+            "pos": 436
+          },
+          {
+            "node": "While",
+            "condition": {
+              "node": "BinOp",
+              "op": "<",
+              "left": {
+                "node": "Var",
+                "name": "i",
+                "pos": 454,
+                "ty": "int"
+              },
+              "right": {
+                "node": "Var",
+                "name": "n",
+                "pos": 458,
+                "ty": "int"
+              },
+              "pos": 456,
+              "ty": "bool"
+            },
+            "invariant": null,
+            "body": {
+              "node": "Block",
+              "statements": [
+                {
+                  "node": "SimpleAssign",
+                  "target": "s",
+                  "value": {
+                    "node": "BinOp",
+                    "op": "+",
+                    "left": {
+                      "node": "BinOp",
+                      "op": "+",
+                      "left": {
+                        "node": "Var",
+                        "name": "s",
+                        "pos": 475,
+                        "ty": "int"
+                      },
+                      "right": {
+                        "node": "BinOp",
+                        "op": "*",
+                        "left": {
+                          "node": "Var",
+                          "name": "i",
+                          "pos": 479,
+                          "ty": "int"
+                        },
+                        "right": {
+                          "node": "Var",
+                          "name": "k",
+                          "pos": 483,
+                          "ty": "int"
+                        },
+                        "pos": 481,
+                        "ty": "int"
+                      },
+                      "pos": 477,
+                      "ty": "int"
+                    },
+                    "right": {
+                      "node": "BinOp",
+                      "op": "-",
+                      "left": {
+                        "node": "IntLiteral",
+                        "value": 1,
+                        "pos": 488,
+                        "ty": "int"
+                      },
+                      "right": {
+                        "node": "IntLiteral",
+                        "value": 1,
+                        "pos": 492,
+                        "ty": "int"
+                      },
+                      "pos": 490,
+                      "ty": "int"
+                    },
+                    "pos": 485,
+                    "ty": "int"
+                  },
+                  "pos": 471
+                },
+                {
+                  "node": "SimpleAssign",
+                  "target": "i",
+                  "value": {
+                    "node": "BinOp",
+                    "op": "+",
+                    "left": {
+                      "node": "Var",
+                      "name": "i",
+                      "pos": 508,
+                      "ty": "int"
+                    },
+                    "right": {
+                      "node": "IntLiteral",
+                      "value": 1,
+                      "pos": 512,
+                      "ty": "int"
+                    },
+                    "pos": 510,
+                    "ty": "int"
+                  },
+                  "pos": 504
+                }
+              ],
+              "pos": 461
+            },
+            "pos": 447
+          }
+        ],
+        "pos": 404
+      },
+      "pos": 364,
+      "symbols": [
+        {
+          "name": "n",
+          "kind": "param",
+          "type": "int",
+          "declared": true,
+          "pos": 371
+        },
+        {
+          "name": "s",
+          "kind": "return",
+          "type": "int",
+          "declared": true,
+          "pos": 387
+        },
+        {
+          "name": "i",
+          "kind": "local",
+          "type": "int",
+          "declared": false,
+          "pos": 399
+        },
+        {
+          "name": "k",
+          "kind": "local",
+          "type": "int",
+          "declared": false,
+          "pos": 402
+        }
+      ]
+    }
+  ],
+  "formulas": []
+}

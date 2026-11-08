@@ -1,0 +1,63 @@
+function sq(x: int) returns (r: int)
+entry:    ; -> (выход)
+    r = x * x
+    ret r
+
+function sumSq(a: int[]) returns (s: int)
+  locals: i: int
+  temps: %t1: int, %t2: int, %t3: int, %t4: int
+entry:    ; -> L1
+    s = 0
+    i = 0
+    jump L1
+L1:    ; -> L2, L3
+    %t1 = length a
+    %t2 = i < %t1
+    br %t2, L2, L3
+L2:    ; -> L1
+    %t3 = a[i]
+    %t4 = call sq(%t3)
+    s = s + %t4
+    i = i + 1
+    jump L1
+L3:    ; -> (выход)
+    ret s
+
+function divmod(a: int, b: int) returns (q: int, m: int)
+  temps: %t1: int
+entry:    ; -> (выход)
+    q = a / b
+    %t1 = q * b
+    m = a - %t1
+    ret q, m
+
+function useDivmod(a: int, b: int) returns (r: int)
+  locals: q: int, m: int
+  temps: %t1: int
+entry:    ; -> (выход)
+    q, m = call divmod(a, b)
+    %t1 = q * 10
+    r = %t1 + m
+    ret r
+
+function setFirst(a: int[], v: int) returns (b: int[])
+entry:    ; -> (выход)
+    b = copy a
+    b[0] = v
+    ret b
+
+function fact(n: int) returns (r: int)
+  temps: %t1: int, %t2: int, %t3: int
+entry:    ; -> L1, L3
+    %t1 = n <= 1
+    br %t1, L1, L3
+L1:    ; -> L2
+    r = 1
+    jump L2
+L3:    ; -> L2
+    %t2 = n - 1
+    %t3 = call fact(%t2)
+    r = n * %t3
+    jump L2
+L2:    ; -> (выход)
+    ret r

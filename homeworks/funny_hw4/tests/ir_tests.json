@@ -1,0 +1,1540 @@
+{
+ "tests": [
+  {
+   "name": "run: свёртка констант и тождества (demo = x + 14)",
+   "kind": "run",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "demo",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      14
+     ]
+    },
+    {
+     "args": [
+      5
+     ],
+     "expect": [
+      19
+     ]
+    },
+    {
+     "args": [
+      -3
+     ],
+     "expect": [
+      11
+     ]
+    },
+    {
+     "args": [
+      2147483647
+     ],
+     "expect": [
+      -2147483635
+     ]
+    },
+    {
+     "args": [
+      -2147483648
+     ],
+     "expect": [
+      -2147483634
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: много временных (poly), переполнение 32 бит",
+   "kind": "run",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "poly",
+   "cases": [
+    {
+     "args": [
+      3,
+      2
+     ],
+     "expect": [
+      29
+     ]
+    },
+    {
+     "args": [
+      0,
+      0
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      -2,
+      5
+     ],
+     "expect": [
+      -15
+     ]
+    },
+    {
+     "args": [
+      100000,
+      3
+     ],
+     "expect": [
+      1410865411
+     ]
+    },
+    {
+     "args": [
+      46341,
+      46341
+     ],
+     "expect": [
+      -2147330726
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: константное условие if (2 > 1)",
+   "kind": "run",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "constCond",
+   "cases": [
+    {
+     "args": [
+      5
+     ],
+     "expect": [
+      6
+     ]
+    },
+    {
+     "args": [
+      -1
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      2147483647
+     ],
+     "expect": [
+      -2147483648
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: ветвление с and/or (граничные значения)",
+   "kind": "run",
+   "input": "// branches with short-circuit logic and loops\nfunction classify(x: int) returns r: int {\n    if (x > 0 and x < 100) {\n        r = 1;\n    } else {\n        if (x == 0 or x < 0 - 100) { r = 2; } else { r = 3; }\n    }\n}\n\nfunction sumTo(n: int) returns s: int uses i {\n    s = 0;\n    i = 1;\n    while (i <= n) {\n        s = s + i;\n        i = i + 1;\n    }\n}\n\nfunction scaled(n: int) returns s: int uses i, k {\n    k = 2 * 3;\n    s = 0;\n    i = 0;\n    while (i < n) {\n        s = s + i * k + (1 - 1);\n        i = i + 1;\n    }\n}\n",
+   "function": "classify",
+   "cases": [
+    {
+     "args": [
+      -500
+     ],
+     "expect": [
+      2
+     ]
+    },
+    {
+     "args": [
+      -101
+     ],
+     "expect": [
+      2
+     ]
+    },
+    {
+     "args": [
+      -100
+     ],
+     "expect": [
+      3
+     ]
+    },
+    {
+     "args": [
+      -1
+     ],
+     "expect": [
+      3
+     ]
+    },
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      2
+     ]
+    },
+    {
+     "args": [
+      1
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      99
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      100
+     ],
+     "expect": [
+      3
+     ]
+    },
+    {
+     "args": [
+      250
+     ],
+     "expect": [
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: цикл while, сумма 1..n",
+   "kind": "run",
+   "input": "// branches with short-circuit logic and loops\nfunction classify(x: int) returns r: int {\n    if (x > 0 and x < 100) {\n        r = 1;\n    } else {\n        if (x == 0 or x < 0 - 100) { r = 2; } else { r = 3; }\n    }\n}\n\nfunction sumTo(n: int) returns s: int uses i {\n    s = 0;\n    i = 1;\n    while (i <= n) {\n        s = s + i;\n        i = i + 1;\n    }\n}\n\nfunction scaled(n: int) returns s: int uses i, k {\n    k = 2 * 3;\n    s = 0;\n    i = 0;\n    while (i < n) {\n        s = s + i * k + (1 - 1);\n        i = i + 1;\n    }\n}\n",
+   "function": "sumTo",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      1
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      10
+     ],
+     "expect": [
+      55
+     ]
+    },
+    {
+     "args": [
+      100
+     ],
+     "expect": [
+      5050
+     ]
+    },
+    {
+     "args": [
+      -5
+     ],
+     "expect": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: цикл с константой k = 2*3 и (1-1)",
+   "kind": "run",
+   "input": "// branches with short-circuit logic and loops\nfunction classify(x: int) returns r: int {\n    if (x > 0 and x < 100) {\n        r = 1;\n    } else {\n        if (x == 0 or x < 0 - 100) { r = 2; } else { r = 3; }\n    }\n}\n\nfunction sumTo(n: int) returns s: int uses i {\n    s = 0;\n    i = 1;\n    while (i <= n) {\n        s = s + i;\n        i = i + 1;\n    }\n}\n\nfunction scaled(n: int) returns s: int uses i, k {\n    k = 2 * 3;\n    s = 0;\n    i = 0;\n    while (i < n) {\n        s = s + i * k + (1 - 1);\n        i = i + 1;\n    }\n}\n",
+   "function": "scaled",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      1
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      5
+     ],
+     "expect": [
+      60
+     ]
+    },
+    {
+     "args": [
+      10
+     ],
+     "expect": [
+      270
+     ]
+    },
+    {
+     "args": [
+      -3
+     ],
+     "expect": [
+      0
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: вызов с несколькими результатами (divmod), ошибка деления на ноль",
+   "kind": "run",
+   "input": "// calls, recursion, tuple results and arrays\nfunction sq(x: int) returns r: int {\n    r = x * x;\n}\n\nfunction sumSq(a: int[]) returns s: int uses i {\n    s = 0;\n    i = 0;\n    while (i < length(a)) {\n        s = s + sq(a[i]);\n        i = i + 1;\n    }\n}\n\nfunction divmod(a: int, b: int) returns q: int, m: int {\n    q = a / b;\n    m = a - q * b;\n}\n\nfunction useDivmod(a: int, b: int) returns r: int uses q, m {\n    q, m = divmod(a, b);\n    r = q * 10 + m;\n}\n\nfunction setFirst(a: int[], v: int) returns b: int[] {\n    b = a;\n    b[0] = v;\n}\n\nfunction fact(n: int) returns r: int {\n    if (n <= 1) { r = 1; } else { r = n * fact(n - 1); }\n}\n",
+   "function": "useDivmod",
+   "cases": [
+    {
+     "args": [
+      17,
+      5
+     ],
+     "expect": [
+      32
+     ]
+    },
+    {
+     "args": [
+      -17,
+      5
+     ],
+     "expect": [
+      -32
+     ]
+    },
+    {
+     "args": [
+      0,
+      3
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      7,
+      -2
+     ],
+     "expect": [
+      -29
+     ]
+    },
+    {
+     "args": [
+      1,
+      0
+     ],
+     "error": "деление на ноль"
+    }
+   ]
+  },
+  {
+   "name": "run: вызов функции в цикле, массив int[]",
+   "kind": "run",
+   "input": "// calls, recursion, tuple results and arrays\nfunction sq(x: int) returns r: int {\n    r = x * x;\n}\n\nfunction sumSq(a: int[]) returns s: int uses i {\n    s = 0;\n    i = 0;\n    while (i < length(a)) {\n        s = s + sq(a[i]);\n        i = i + 1;\n    }\n}\n\nfunction divmod(a: int, b: int) returns q: int, m: int {\n    q = a / b;\n    m = a - q * b;\n}\n\nfunction useDivmod(a: int, b: int) returns r: int uses q, m {\n    q, m = divmod(a, b);\n    r = q * 10 + m;\n}\n\nfunction setFirst(a: int[], v: int) returns b: int[] {\n    b = a;\n    b[0] = v;\n}\n\nfunction fact(n: int) returns r: int {\n    if (n <= 1) { r = 1; } else { r = n * fact(n - 1); }\n}\n",
+   "function": "sumSq",
+   "cases": [
+    {
+     "args": [
+      [
+       1,
+       2,
+       3
+      ]
+     ],
+     "expect": [
+      14
+     ]
+    },
+    {
+     "args": [
+      []
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      [
+       -4
+      ]
+     ],
+     "expect": [
+      16
+     ]
+    },
+    {
+     "args": [
+      [
+       46341,
+       46341
+      ]
+     ],
+     "expect": [
+      9266
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: копирование массива и запись b[0] = v (исходный не меняется)",
+   "kind": "run",
+   "input": "// calls, recursion, tuple results and arrays\nfunction sq(x: int) returns r: int {\n    r = x * x;\n}\n\nfunction sumSq(a: int[]) returns s: int uses i {\n    s = 0;\n    i = 0;\n    while (i < length(a)) {\n        s = s + sq(a[i]);\n        i = i + 1;\n    }\n}\n\nfunction divmod(a: int, b: int) returns q: int, m: int {\n    q = a / b;\n    m = a - q * b;\n}\n\nfunction useDivmod(a: int, b: int) returns r: int uses q, m {\n    q, m = divmod(a, b);\n    r = q * 10 + m;\n}\n\nfunction setFirst(a: int[], v: int) returns b: int[] {\n    b = a;\n    b[0] = v;\n}\n\nfunction fact(n: int) returns r: int {\n    if (n <= 1) { r = 1; } else { r = n * fact(n - 1); }\n}\n",
+   "function": "setFirst",
+   "cases": [
+    {
+     "args": [
+      [
+       9,
+       8
+      ],
+      5
+     ],
+     "expect": [
+      [
+       5,
+       8
+      ]
+     ]
+    },
+    {
+     "args": [
+      [
+       1
+      ],
+      -1
+     ],
+     "expect": [
+      [
+       -1
+      ]
+     ]
+    },
+    {
+     "args": [
+      [],
+      3
+     ],
+     "error": "границы массива"
+    }
+   ]
+  },
+  {
+   "name": "run: рекурсия, переполнение факториала",
+   "kind": "run",
+   "input": "// calls, recursion, tuple results and arrays\nfunction sq(x: int) returns r: int {\n    r = x * x;\n}\n\nfunction sumSq(a: int[]) returns s: int uses i {\n    s = 0;\n    i = 0;\n    while (i < length(a)) {\n        s = s + sq(a[i]);\n        i = i + 1;\n    }\n}\n\nfunction divmod(a: int, b: int) returns q: int, m: int {\n    q = a / b;\n    m = a - q * b;\n}\n\nfunction useDivmod(a: int, b: int) returns r: int uses q, m {\n    q, m = divmod(a, b);\n    r = q * 10 + m;\n}\n\nfunction setFirst(a: int[], v: int) returns b: int[] {\n    b = a;\n    b[0] = v;\n}\n\nfunction fact(n: int) returns r: int {\n    if (n <= 1) { r = 1; } else { r = n * fact(n - 1); }\n}\n",
+   "function": "fact",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      1
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      5
+     ],
+     "expect": [
+      120
+     ]
+    },
+    {
+     "args": [
+      10
+     ],
+     "expect": [
+      3628800
+     ]
+    },
+    {
+     "args": [
+      13
+     ],
+     "expect": [
+      1932053504
+     ]
+    },
+    {
+     "args": [
+      20
+     ],
+     "expect": [
+      -2102132736
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: мёртвое деление на ноль НЕ удаляется (исключение сохраняется)",
+   "kind": "run",
+   "input": "function dz(x: int) returns r: int uses d { d = x / 0; r = 5; }",
+   "function": "dz",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "error": "деление на ноль"
+    },
+    {
+     "args": [
+      7
+     ],
+     "error": "деление на ноль"
+    }
+   ]
+  },
+  {
+   "name": "run: деление на ненулевую константу сворачивается",
+   "kind": "run",
+   "input": "function dc(x: int) returns r: int uses d { d = 10 / 2; r = d + x; }",
+   "function": "dc",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      5
+     ]
+    },
+    {
+     "args": [
+      3
+     ],
+     "expect": [
+      8
+     ]
+    },
+    {
+     "args": [
+      -8
+     ],
+     "expect": [
+      -3
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: INT_MIN / -1 переполняется по модулю 2^32",
+   "kind": "run",
+   "input": "function mn(x: int) returns r: int { r = x / (0 - 1); }",
+   "function": "mn",
+   "cases": [
+    {
+     "args": [
+      -2147483648
+     ],
+     "expect": [
+      -2147483648
+     ]
+    },
+    {
+     "args": [
+      5
+     ],
+     "expect": [
+      -5
+     ]
+    },
+    {
+     "args": [
+      -7
+     ],
+     "expect": [
+      7
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: мёртвое чтение a[5] НЕ удаляется (проверка границ)",
+   "kind": "run",
+   "input": "function oob(a: int[]) returns r: int uses t { t = a[5]; r = 1; }",
+   "function": "oob",
+   "cases": [
+    {
+     "args": [
+      [
+       1,
+       2
+      ]
+     ],
+     "error": "границы массива"
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "expect": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: and вычисляется лениво (10 / x при x = 0 не выполняется)",
+   "kind": "run",
+   "input": "function sc(x: int) returns r: int { if (x != 0 and 10 / x > 1) { r = 1; } else { r = 0; } }",
+   "function": "sc",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      2
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      20
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      -2
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      5
+     ],
+     "expect": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: or вычисляется лениво",
+   "kind": "run",
+   "input": "function sc(x: int) returns r: int { if (x == 0 or 10 / x > 1) { r = 1; } else { r = 0; } }",
+   "function": "sc",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      2
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      20
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      -2
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      5
+     ],
+     "expect": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: импликация ->",
+   "kind": "run",
+   "input": "function imp(x: int, y: int) returns r: int { if (x > 0 -> y > 0) { r = 1; } else { r = 0; } }",
+   "function": "imp",
+   "cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      1,
+      -1
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      -1,
+      1
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      -1,
+      -1
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      0,
+      0
+     ],
+     "expect": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: not и and",
+   "kind": "run",
+   "input": "function nt(x: int, y: int) returns r: int { if (not (x > y) and not (y > x)) { r = 1; } else { r = 0; } }",
+   "function": "nt",
+   "cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      1,
+      2
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      2,
+      1
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      -3,
+      -3
+     ],
+     "expect": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: алгебраические упрощения (x-x, x*0, x+0, x*1, x==x)",
+   "kind": "run",
+   "input": "function alg(x: int) returns r: int uses a, b { a = x - x; b = x * 0; r = (x + 0) * 1 + a + b; if (x == x) { r = r + 1; } }",
+   "function": "alg",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      41
+     ],
+     "expect": [
+      42
+     ]
+    },
+    {
+     "args": [
+      -9
+     ],
+     "expect": [
+      -8
+     ]
+    },
+    {
+     "args": [
+      2147483647
+     ],
+     "expect": [
+      -2147483648
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: 0 - x заменяется на -x (в т.ч. для INT_MIN)",
+   "kind": "run",
+   "input": "function ng(x: int) returns r: int { r = 0 - x; }",
+   "function": "ng",
+   "cases": [
+    {
+     "args": [
+      5
+     ],
+     "expect": [
+      -5
+     ]
+    },
+    {
+     "args": [
+      -5
+     ],
+     "expect": [
+      5
+     ]
+    },
+    {
+     "args": [
+      -2147483648
+     ],
+     "expect": [
+      -2147483648
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: цикл по массиву (aload, astore, length, copy)",
+   "kind": "run",
+   "input": "function bump(a: int[], k: int) returns b: int[] uses i { b = a; i = 0; while (i < length(b)) { b[i] = b[i] + k; i = i + 1; } }",
+   "function": "bump",
+   "cases": [
+    {
+     "args": [
+      [
+       1,
+       2,
+       3
+      ],
+      10
+     ],
+     "expect": [
+      [
+       11,
+       12,
+       13
+      ]
+     ]
+    },
+    {
+     "args": [
+      [],
+      5
+     ],
+     "expect": [
+      []
+     ]
+    },
+    {
+     "args": [
+      [
+       2147483647
+      ],
+      1
+     ],
+     "expect": [
+      [
+       -2147483648
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: взаимная рекурсия, вызов функции, определённой ниже",
+   "kind": "run",
+   "input": "function ev(n: int) returns r: int { if (n == 0) { r = 1; } else { r = od(n - 1); } }\nfunction od(n: int) returns r: int { if (n == 0) { r = 0; } else { r = ev(n - 1); } }",
+   "function": "ev",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      7
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      10
+     ],
+     "expect": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: присваивание кортежа p, q = sw(a, b)",
+   "kind": "run",
+   "input": "function sw(a: int, b: int) returns x: int, y: int { x = b; y = a; }\nfunction use(a: int, b: int) returns r: int uses p, q { p, q = sw(a, b); r = p * 100 + q; }",
+   "function": "use",
+   "cases": [
+    {
+     "args": [
+      1,
+      2
+     ],
+     "expect": [
+      201
+     ]
+    },
+    {
+     "args": [
+      0,
+      0
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      -1,
+      5
+     ],
+     "expect": [
+      499
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: константа переопределена неконстантой в том же блоке",
+   "kind": "run",
+   "input": "function rd(x: int) returns r: int uses a { a = 5; a = x + 1; r = a; }",
+   "function": "rd",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      1
+     ]
+    },
+    {
+     "args": [
+      41
+     ],
+     "expect": [
+      42
+     ]
+    },
+    {
+     "args": [
+      -9
+     ],
+     "expect": [
+      -8
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: константа переопределена результатом вызова",
+   "kind": "run",
+   "input": "function sq(x: int) returns r: int { r = x * x; }\nfunction rc(x: int) returns r: int uses a { a = 5; a = sq(x); r = a + 0; }",
+   "function": "rc",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      0
+     ]
+    },
+    {
+     "args": [
+      3
+     ],
+     "expect": [
+      9
+     ]
+    },
+    {
+     "args": [
+      -4
+     ],
+     "expect": [
+      16
+     ]
+    }
+   ]
+  },
+  {
+   "name": "run: цепочка переопределений a, b в одном блоке",
+   "kind": "run",
+   "input": "function rt(x: int) returns r: int uses a, b { a = 3; b = a + 1; a = b * x; r = a + b; }",
+   "function": "rt",
+   "cases": [
+    {
+     "args": [
+      0
+     ],
+     "expect": [
+      4
+     ]
+    },
+    {
+     "args": [
+      2
+     ],
+     "expect": [
+      12
+     ]
+    },
+    {
+     "args": [
+      -5
+     ],
+     "expect": [
+      -16
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ir: свёртка, тождества и удаление мёртвого кода (demo)",
+   "kind": "ir",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "demo",
+   "opt": "all",
+   "before": [
+    "function demo(x: int) returns (r: int)",
+    "  locals: a: int, b: int, dead: int",
+    "  temps: %t1: int, %t2: int, %t3: int, %t4: int",
+    "entry:",
+    "    %t1 = 3 * 4",
+    "    a = 2 + %t1",
+    "    b = a + 0",
+    "    dead = x * 10",
+    "    %t2 = x * 1",
+    "    %t3 = %t2 + b",
+    "    r = %t3 - 0",
+    "    %t4 = 0 * x",
+    "    r = r + %t4",
+    "    ret r"
+   ],
+   "after": [
+    "function demo(x: int) returns (r: int)",
+    "  locals: a: int, b: int, dead: int",
+    "  temps: %t2: int, %t3: int",
+    "entry:",
+    "    %t2 = x",
+    "    %t3 = %t2 + 14",
+    "    r = %t3",
+    "    ret r"
+   ]
+  },
+  {
+   "name": "ir: константное условие, недостижимый блок удаляется",
+   "kind": "ir",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "constCond",
+   "opt": "all",
+   "before": [
+    "function constCond(x: int) returns (r: int)",
+    "  temps: %t1: int",
+    "entry:",
+    "    %t1 = 2 > 1",
+    "    br %t1, L1, L3",
+    "L1:",
+    "    r = x + 1",
+    "    jump L2",
+    "L3:",
+    "    r = x - 1",
+    "    jump L2",
+    "L2:",
+    "    ret r"
+   ],
+   "after": [
+    "function constCond(x: int) returns (r: int)",
+    "entry:",
+    "    jump L1",
+    "L1:",
+    "    r = x + 1",
+    "    jump L2",
+    "L2:",
+    "    ret r"
+   ]
+  },
+  {
+   "name": "ir: ленивое and через переходы",
+   "kind": "ir",
+   "input": "function sc(x: int) returns r: int { if (x > 0 and x < 9) { r = 1; } else { r = 0; } }",
+   "function": "sc",
+   "opt": "all",
+   "before": [
+    "function sc(x: int) returns (r: int)",
+    "  temps: %t1: int, %t2: int, %t3: int",
+    "entry:",
+    "    %t2 = x > 0",
+    "    %t1 = %t2",
+    "    br %t1, L1, L2",
+    "L1:",
+    "    %t3 = x < 9",
+    "    %t1 = %t3",
+    "    jump L2",
+    "L2:",
+    "    br %t1, L3, L5",
+    "L3:",
+    "    r = 1",
+    "    jump L4",
+    "L5:",
+    "    r = 0",
+    "    jump L4",
+    "L4:",
+    "    ret r"
+   ],
+   "after": [
+    "function sc(x: int) returns (r: int)",
+    "  temps: %t1: int, %t2: int, %t3: int",
+    "entry:",
+    "    %t2 = x > 0",
+    "    %t1 = %t2",
+    "    br %t1, L1, L2",
+    "L1:",
+    "    %t3 = x < 9",
+    "    %t1 = %t3",
+    "    jump L2",
+    "L2:",
+    "    br %t1, L3, L5",
+    "L3:",
+    "    r = 1",
+    "    jump L4",
+    "L5:",
+    "    r = 0",
+    "    jump L4",
+    "L4:",
+    "    ret r"
+   ]
+  },
+  {
+   "name": "ir: вызов с двумя результатами, a[q], length",
+   "kind": "ir",
+   "input": "function two(i: int) returns a: int, b: int { a = i; b = i + 1; }\nfunction g(a: int[], i: int) returns r: int uses q, p { q, p = two(i); r = a[q] + length(a); }",
+   "function": "g",
+   "opt": "all",
+   "before": [
+    "function g(a: int[], i: int) returns (r: int)",
+    "  locals: q: int, p: int",
+    "  temps: %t1: int, %t2: int",
+    "entry:",
+    "    q, p = call two(i)",
+    "    %t1 = a[q]",
+    "    %t2 = length a",
+    "    r = %t1 + %t2",
+    "    ret r"
+   ],
+   "after": [
+    "function g(a: int[], i: int) returns (r: int)",
+    "  locals: q: int, p: int",
+    "  temps: %t1: int, %t2: int",
+    "entry:",
+    "    q, p = call two(i)",
+    "    %t1 = a[q]",
+    "    %t2 = length a",
+    "    r = %t1 + %t2",
+    "    ret r"
+   ]
+  },
+  {
+   "name": "ir: copy и запись в массив",
+   "kind": "ir",
+   "input": "// calls, recursion, tuple results and arrays\nfunction sq(x: int) returns r: int {\n    r = x * x;\n}\n\nfunction sumSq(a: int[]) returns s: int uses i {\n    s = 0;\n    i = 0;\n    while (i < length(a)) {\n        s = s + sq(a[i]);\n        i = i + 1;\n    }\n}\n\nfunction divmod(a: int, b: int) returns q: int, m: int {\n    q = a / b;\n    m = a - q * b;\n}\n\nfunction useDivmod(a: int, b: int) returns r: int uses q, m {\n    q, m = divmod(a, b);\n    r = q * 10 + m;\n}\n\nfunction setFirst(a: int[], v: int) returns b: int[] {\n    b = a;\n    b[0] = v;\n}\n\nfunction fact(n: int) returns r: int {\n    if (n <= 1) { r = 1; } else { r = n * fact(n - 1); }\n}\n",
+   "function": "setFirst",
+   "opt": "all",
+   "before": [
+    "function setFirst(a: int[], v: int) returns (b: int[])",
+    "entry:",
+    "    b = copy a",
+    "    b[0] = v",
+    "    ret b"
+   ],
+   "after": [
+    "function setFirst(a: int[], v: int) returns (b: int[])",
+    "entry:",
+    "    b = copy a",
+    "    b[0] = v",
+    "    ret b"
+   ]
+  },
+  {
+   "name": "ir: алгебраические упрощения и свёртка ветвления",
+   "kind": "ir",
+   "input": "function alg(x: int) returns r: int uses a, b { a = x - x; b = x * 0; r = (x + 0) * 1 + a + b; if (x == x) { r = r + 1; } }",
+   "function": "alg",
+   "opt": "all",
+   "before": [
+    "function alg(x: int) returns (r: int)",
+    "  locals: a: int, b: int",
+    "  temps: %t1: int, %t2: int, %t3: int, %t4: int",
+    "entry:",
+    "    a = x - x",
+    "    b = x * 0",
+    "    %t1 = x + 0",
+    "    %t2 = %t1 * 1",
+    "    %t3 = %t2 + a",
+    "    r = %t3 + b",
+    "    %t4 = x == x",
+    "    br %t4, L1, L2",
+    "L1:",
+    "    r = r + 1",
+    "    jump L2",
+    "L2:",
+    "    ret r"
+   ],
+   "after": [
+    "function alg(x: int) returns (r: int)",
+    "  locals: a: int, b: int",
+    "  temps: %t1: int, %t2: int, %t3: int",
+    "entry:",
+    "    %t1 = x",
+    "    %t2 = %t1",
+    "    %t3 = %t2",
+    "    r = %t3",
+    "    jump L1",
+    "L1:",
+    "    r = r + 1",
+    "    jump L2",
+    "L2:",
+    "    ret r"
+   ]
+  },
+  {
+   "name": "ir: 0 - x превращается в -x",
+   "kind": "ir",
+   "input": "function ng(x: int) returns r: int { r = 0 - x; }",
+   "function": "ng",
+   "opt": "all",
+   "before": [
+    "function ng(x: int) returns (r: int)",
+    "entry:",
+    "    r = 0 - x",
+    "    ret r"
+   ],
+   "after": [
+    "function ng(x: int) returns (r: int)",
+    "entry:",
+    "    r = -x",
+    "    ret r"
+   ]
+  },
+  {
+   "name": "ir: без оптимизаций IR не меняется",
+   "kind": "ir",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "demo",
+   "opt": "none",
+   "before": [
+    "function demo(x: int) returns (r: int)",
+    "  locals: a: int, b: int, dead: int",
+    "  temps: %t1: int, %t2: int, %t3: int, %t4: int",
+    "entry:",
+    "    %t1 = 3 * 4",
+    "    a = 2 + %t1",
+    "    b = a + 0",
+    "    dead = x * 10",
+    "    %t2 = x * 1",
+    "    %t3 = %t2 + b",
+    "    r = %t3 - 0",
+    "    %t4 = 0 * x",
+    "    r = r + %t4",
+    "    ret r"
+   ],
+   "after": [
+    "function demo(x: int) returns (r: int)",
+    "  locals: a: int, b: int, dead: int",
+    "  temps: %t1: int, %t2: int, %t3: int, %t4: int",
+    "entry:",
+    "    %t1 = 3 * 4",
+    "    a = 2 + %t1",
+    "    b = a + 0",
+    "    dead = x * 10",
+    "    %t2 = x * 1",
+    "    %t3 = %t2 + b",
+    "    r = %t3 - 0",
+    "    %t4 = 0 * x",
+    "    r = r + %t4",
+    "    ret r"
+   ]
+  },
+  {
+   "name": "cfg: цикл while (заголовок, тело, выход, обратное ребро)",
+   "kind": "cfg",
+   "input": "// branches with short-circuit logic and loops\nfunction classify(x: int) returns r: int {\n    if (x > 0 and x < 100) {\n        r = 1;\n    } else {\n        if (x == 0 or x < 0 - 100) { r = 2; } else { r = 3; }\n    }\n}\n\nfunction sumTo(n: int) returns s: int uses i {\n    s = 0;\n    i = 1;\n    while (i <= n) {\n        s = s + i;\n        i = i + 1;\n    }\n}\n\nfunction scaled(n: int) returns s: int uses i, k {\n    k = 2 * 3;\n    s = 0;\n    i = 0;\n    while (i < n) {\n        s = s + i * k + (1 - 1);\n        i = i + 1;\n    }\n}\n",
+   "function": "sumTo",
+   "blocks": {
+    "entry": [
+     "L1"
+    ],
+    "L1": [
+     "L2",
+     "L3"
+    ],
+    "L2": [
+     "L1"
+    ],
+    "L3": []
+   }
+  },
+  {
+   "name": "cfg: вложенные if и ленивые and/or",
+   "kind": "cfg",
+   "input": "// branches with short-circuit logic and loops\nfunction classify(x: int) returns r: int {\n    if (x > 0 and x < 100) {\n        r = 1;\n    } else {\n        if (x == 0 or x < 0 - 100) { r = 2; } else { r = 3; }\n    }\n}\n\nfunction sumTo(n: int) returns s: int uses i {\n    s = 0;\n    i = 1;\n    while (i <= n) {\n        s = s + i;\n        i = i + 1;\n    }\n}\n\nfunction scaled(n: int) returns s: int uses i, k {\n    k = 2 * 3;\n    s = 0;\n    i = 0;\n    while (i < n) {\n        s = s + i * k + (1 - 1);\n        i = i + 1;\n    }\n}\n",
+   "function": "classify",
+   "blocks": {
+    "entry": [
+     "L1",
+     "L2"
+    ],
+    "L1": [
+     "L2"
+    ],
+    "L2": [
+     "L3",
+     "L5"
+    ],
+    "L3": [
+     "L4"
+    ],
+    "L5": [
+     "L7",
+     "L6"
+    ],
+    "L6": [
+     "L7"
+    ],
+    "L7": [
+     "L8",
+     "L10"
+    ],
+    "L8": [
+     "L9"
+    ],
+    "L10": [
+     "L9"
+    ],
+    "L9": [
+     "L4"
+    ],
+    "L4": []
+   }
+  },
+  {
+   "name": "cfg: прямая последовательность это один блок",
+   "kind": "cfg",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "poly",
+   "blocks": {
+    "entry": []
+   }
+  },
+  {
+   "name": "metrics: demo (10 -> 4 инструкции, временных 4 -> 2)",
+   "kind": "metrics",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "demo",
+   "before": {
+    "blocks": 1,
+    "instrs": 10,
+    "temps": 4,
+    "colors": 1
+   },
+   "after": {
+    "blocks": 1,
+    "instrs": 4,
+    "temps": 2,
+    "colors": 1
+   }
+  },
+  {
+   "name": "metrics: poly (3 цвета: три временных живы одновременно)",
+   "kind": "metrics",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "poly",
+   "before": {
+    "blocks": 1,
+    "instrs": 9,
+    "temps": 7,
+    "colors": 3
+   },
+   "after": {
+    "blocks": 1,
+    "instrs": 9,
+    "temps": 7,
+    "colors": 3
+   }
+  },
+  {
+   "name": "metrics: constCond (блоков 4 -> 3, временных 1 -> 0)",
+   "kind": "metrics",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "constCond",
+   "before": {
+    "blocks": 4,
+    "instrs": 7,
+    "temps": 1,
+    "colors": 1
+   },
+   "after": {
+    "blocks": 3,
+    "instrs": 4,
+    "temps": 0,
+    "colors": 0
+   }
+  },
+  {
+   "name": "metrics: цикл scaled (константа 2*3 и 1-1 свёрнуты)",
+   "kind": "metrics",
+   "input": "// branches with short-circuit logic and loops\nfunction classify(x: int) returns r: int {\n    if (x > 0 and x < 100) {\n        r = 1;\n    } else {\n        if (x == 0 or x < 0 - 100) { r = 2; } else { r = 3; }\n    }\n}\n\nfunction sumTo(n: int) returns s: int uses i {\n    s = 0;\n    i = 1;\n    while (i <= n) {\n        s = s + i;\n        i = i + 1;\n    }\n}\n\nfunction scaled(n: int) returns s: int uses i, k {\n    k = 2 * 3;\n    s = 0;\n    i = 0;\n    while (i < n) {\n        s = s + i * k + (1 - 1);\n        i = i + 1;\n    }\n}\n",
+   "function": "scaled",
+   "before": {
+    "blocks": 4,
+    "instrs": 13,
+    "temps": 4,
+    "colors": 2
+   },
+   "after": {
+    "blocks": 4,
+    "instrs": 12,
+    "temps": 3,
+    "colors": 1
+   }
+  },
+  {
+   "name": "flags: действие каждой оптимизации по отдельности (demo)",
+   "kind": "flags",
+   "input": "// straight-line code: constant folding, algebraic identities, dead code\nfunction demo(x: int) returns r: int uses a, b, dead {\n    a = 2 + 3 * 4;\n    b = a + 0;\n    dead = x * 10;\n    r = x * 1 + b - 0;\n    r = r + 0 * x;\n}\n\n// several temporaries alive at once, so coloring needs more than one color\nfunction poly(x: int, y: int) returns r: int {\n    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);\n}\n\n// constant condition: the else branch becomes unreachable\nfunction constCond(x: int) returns r: int {\n    if (2 > 1) { r = x + 1; } else { r = x - 1; }\n}\n",
+   "function": "demo",
+   "instrs": {
+    "none": 10,
+    "constprop": 10,
+    "algebra": 10,
+    "dce": 9,
+    "constprop,dce": 6,
+    "algebra,dce": 9,
+    "constprop,algebra": 9,
+    "all": 4
+   }
+  },
+  {
+   "name": "fuzz: 120 случайных программ, seed 1, сетка из 27 входов, 6 режимов",
+   "kind": "fuzz",
+   "seed": 1,
+   "count": 120
+  },
+  {
+   "name": "fuzz: 120 случайных программ, seed 2",
+   "kind": "fuzz",
+   "seed": 2,
+   "count": 120
+  }
+ ]
+}

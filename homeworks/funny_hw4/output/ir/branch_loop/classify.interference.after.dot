@@ -1,0 +1,9 @@
+graph "classify_interference" {
+  node [style=filled, fontname=Courier];
+  "%t1" [label="%t1\ncolor 0", fillcolor=lightblue];
+  "%t2" [label="%t2\ncolor 0", fillcolor=lightblue];
+  "%t3" [label="%t3\ncolor 0", fillcolor=lightblue];
+  "%t4" [label="%t4\ncolor 0", fillcolor=lightblue];
+  "%t5" [label="%t5\ncolor 0", fillcolor=lightblue];
+  "%t7" [label="%t7\ncolor 0", fillcolor=lightblue];
+}

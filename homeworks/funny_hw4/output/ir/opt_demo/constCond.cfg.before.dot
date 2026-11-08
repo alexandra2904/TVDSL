@@ -1,0 +1,11 @@
+digraph "constCond" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|%t1 = 2 \> 1\lbr %t1, L1, L3\l}"];
+  "L1" [label="{L1:|r = x + 1\ljump L2\l}"];
+  "L3" [label="{L3:|r = x - 1\ljump L2\l}"];
+  "L2" [label="{L2:|ret r\l}"];
+  "entry" -> "L1" [label="true"];
+  "entry" -> "L3" [label="false"];
+  "L1" -> "L2";
+  "L3" -> "L2";
+}

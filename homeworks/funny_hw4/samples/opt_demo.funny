@@ -1,0 +1,18 @@
+// straight-line code: constant folding, algebraic identities, dead code
+function demo(x: int) returns r: int uses a, b, dead {
+    a = 2 + 3 * 4;
+    b = a + 0;
+    dead = x * 10;
+    r = x * 1 + b - 0;
+    r = r + 0 * x;
+}
+
+// several temporaries alive at once, so coloring needs more than one color
+function poly(x: int, y: int) returns r: int {
+    r = (x + y) * (x - y) + (x * 2 + y) * (y + 1);
+}
+
+// constant condition: the else branch becomes unreachable
+function constCond(x: int) returns r: int {
+    if (2 > 1) { r = x + 1; } else { r = x - 1; }
+}

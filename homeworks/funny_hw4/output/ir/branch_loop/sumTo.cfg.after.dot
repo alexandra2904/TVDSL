@@ -1,0 +1,11 @@
+digraph "sumTo" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|s = 0\li = 1\ljump L1\l}"];
+  "L1" [label="{L1:|%t1 = i \<= n\lbr %t1, L2, L3\l}"];
+  "L2" [label="{L2:|s = s + i\li = i + 1\ljump L1\l}"];
+  "L3" [label="{L3:|ret s\l}"];
+  "entry" -> "L1";
+  "L1" -> "L2" [label="true"];
+  "L1" -> "L3" [label="false"];
+  "L2" -> "L1";
+}

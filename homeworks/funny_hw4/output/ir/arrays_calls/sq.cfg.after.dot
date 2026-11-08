@@ -1,0 +1,4 @@
+digraph "sq" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|r = x * x\lret r\l}"];
+}

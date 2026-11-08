@@ -1,0 +1,1373 @@
+{
+  "optimizations": [
+    "constprop",
+    "algebra",
+    "dce"
+  ],
+  "before": {
+    "functions": [
+      {
+        "name": "sq",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "x",
+                  "x"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "sumSq",
+        "params": [
+          {
+            "name": "a",
+            "type": "int[]"
+          }
+        ],
+        "returns": [
+          {
+            "name": "s",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "i",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          },
+          {
+            "name": "%t4",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "len",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "a"
+                ]
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "i",
+                  "%t1"
+                ],
+                "operator": "<"
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t2"
+                ],
+                "targets": [
+                  "L2",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L2",
+              "L3"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "aload",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "a",
+                  "i"
+                ]
+              },
+              {
+                "op": "call",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  "%t3"
+                ],
+                "callee": "sq"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  "s",
+                  "%t4"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  "i",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "s"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "divmod",
+        "params": [
+          {
+            "name": "a",
+            "type": "int"
+          },
+          {
+            "name": "b",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "q",
+            "type": "int"
+          },
+          {
+            "name": "m",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "q"
+                ],
+                "args": [
+                  "a",
+                  "b"
+                ],
+                "operator": "/"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "q",
+                  "b"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "m"
+                ],
+                "args": [
+                  "a",
+                  "%t1"
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "q",
+                  "m"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "useDivmod",
+        "params": [
+          {
+            "name": "a",
+            "type": "int"
+          },
+          {
+            "name": "b",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "q",
+            "type": "int"
+          },
+          {
+            "name": "m",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "call",
+                "dsts": [
+                  "q",
+                  "m"
+                ],
+                "args": [
+                  "a",
+                  "b"
+                ],
+                "callee": "divmod"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "q",
+                  10
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "%t1",
+                  "m"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "setFirst",
+        "params": [
+          {
+            "name": "a",
+            "type": "int[]"
+          },
+          {
+            "name": "v",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "b",
+            "type": "int[]"
+          }
+        ],
+        "locals": [],
+        "temps": [],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "copy",
+                "dsts": [
+                  "b"
+                ],
+                "args": [
+                  "a"
+                ]
+              },
+              {
+                "op": "astore",
+                "dsts": [
+                  "b"
+                ],
+                "args": [
+                  "b",
+                  0,
+                  "v"
+                ]
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "b"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "fact",
+        "params": [
+          {
+            "name": "n",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "n",
+                  1
+                ],
+                "operator": "<="
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L1",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L1",
+              "L3"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  1
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "n",
+                  1
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "call",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "%t2"
+                ],
+                "callee": "fact"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "n",
+                  "%t3"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      }
+    ]
+  },
+  "after": {
+    "functions": [
+      {
+        "name": "sq",
+        "params": [
+          {
+            "name": "x",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "x",
+                  "x"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "sumSq",
+        "params": [
+          {
+            "name": "a",
+            "type": "int[]"
+          }
+        ],
+        "returns": [
+          {
+            "name": "s",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "i",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          },
+          {
+            "name": "%t4",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "mov",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  0
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "len",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "a"
+                ]
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "i",
+                  "%t1"
+                ],
+                "operator": "<"
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t2"
+                ],
+                "targets": [
+                  "L2",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L2",
+              "L3"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "aload",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "a",
+                  "i"
+                ]
+              },
+              {
+                "op": "call",
+                "dsts": [
+                  "%t4"
+                ],
+                "args": [
+                  "%t3"
+                ],
+                "callee": "sq"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "s"
+                ],
+                "args": [
+                  "s",
+                  "%t4"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "i"
+                ],
+                "args": [
+                  "i",
+                  1
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L1"
+                ]
+              }
+            ],
+            "succs": [
+              "L1"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "s"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "divmod",
+        "params": [
+          {
+            "name": "a",
+            "type": "int"
+          },
+          {
+            "name": "b",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "q",
+            "type": "int"
+          },
+          {
+            "name": "m",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "q"
+                ],
+                "args": [
+                  "a",
+                  "b"
+                ],
+                "operator": "/"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "q",
+                  "b"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "m"
+                ],
+                "args": [
+                  "a",
+                  "%t1"
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "q",
+                  "m"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "useDivmod",
+        "params": [
+          {
+            "name": "a",
+            "type": "int"
+          },
+          {
+            "name": "b",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [
+          {
+            "name": "q",
+            "type": "int"
+          },
+          {
+            "name": "m",
+            "type": "int"
+          }
+        ],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "call",
+                "dsts": [
+                  "q",
+                  "m"
+                ],
+                "args": [
+                  "a",
+                  "b"
+                ],
+                "callee": "divmod"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "q",
+                  10
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "%t1",
+                  "m"
+                ],
+                "operator": "+"
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "setFirst",
+        "params": [
+          {
+            "name": "a",
+            "type": "int[]"
+          },
+          {
+            "name": "v",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "b",
+            "type": "int[]"
+          }
+        ],
+        "locals": [],
+        "temps": [],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "copy",
+                "dsts": [
+                  "b"
+                ],
+                "args": [
+                  "a"
+                ]
+              },
+              {
+                "op": "astore",
+                "dsts": [
+                  "b"
+                ],
+                "args": [
+                  "b",
+                  0,
+                  "v"
+                ]
+              },
+              {
+                "op": "ret",
+                "args": [
+                  "b"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      },
+      {
+        "name": "fact",
+        "params": [
+          {
+            "name": "n",
+            "type": "int"
+          }
+        ],
+        "returns": [
+          {
+            "name": "r",
+            "type": "int"
+          }
+        ],
+        "locals": [],
+        "temps": [
+          {
+            "name": "%t1",
+            "type": "int"
+          },
+          {
+            "name": "%t2",
+            "type": "int"
+          },
+          {
+            "name": "%t3",
+            "type": "int"
+          }
+        ],
+        "blocks": [
+          {
+            "label": "entry",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t1"
+                ],
+                "args": [
+                  "n",
+                  1
+                ],
+                "operator": "<="
+              },
+              {
+                "op": "br",
+                "args": [
+                  "%t1"
+                ],
+                "targets": [
+                  "L1",
+                  "L3"
+                ]
+              }
+            ],
+            "succs": [
+              "L1",
+              "L3"
+            ]
+          },
+          {
+            "label": "L1",
+            "instrs": [
+              {
+                "op": "mov",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  1
+                ]
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L3",
+            "instrs": [
+              {
+                "op": "bin",
+                "dsts": [
+                  "%t2"
+                ],
+                "args": [
+                  "n",
+                  1
+                ],
+                "operator": "-"
+              },
+              {
+                "op": "call",
+                "dsts": [
+                  "%t3"
+                ],
+                "args": [
+                  "%t2"
+                ],
+                "callee": "fact"
+              },
+              {
+                "op": "bin",
+                "dsts": [
+                  "r"
+                ],
+                "args": [
+                  "n",
+                  "%t3"
+                ],
+                "operator": "*"
+              },
+              {
+                "op": "jump",
+                "targets": [
+                  "L2"
+                ]
+              }
+            ],
+            "succs": [
+              "L2"
+            ]
+          },
+          {
+            "label": "L2",
+            "instrs": [
+              {
+                "op": "ret",
+                "args": [
+                  "r"
+                ]
+              }
+            ],
+            "succs": []
+          }
+        ]
+      }
+    ]
+  },
+  "metrics": {
+    "before": {
+      "sq": {
+        "blocks": 1,
+        "instrs": 2,
+        "temps": 0,
+        "colors": 0
+      },
+      "sumSq": {
+        "blocks": 4,
+        "instrs": 12,
+        "temps": 4,
+        "colors": 1
+      },
+      "divmod": {
+        "blocks": 1,
+        "instrs": 4,
+        "temps": 1,
+        "colors": 1
+      },
+      "useDivmod": {
+        "blocks": 1,
+        "instrs": 4,
+        "temps": 1,
+        "colors": 1
+      },
+      "setFirst": {
+        "blocks": 1,
+        "instrs": 3,
+        "temps": 0,
+        "colors": 0
+      },
+      "fact": {
+        "blocks": 4,
+        "instrs": 9,
+        "temps": 3,
+        "colors": 1
+      }
+    },
+    "after": {
+      "sq": {
+        "blocks": 1,
+        "instrs": 2,
+        "temps": 0,
+        "colors": 0
+      },
+      "sumSq": {
+        "blocks": 4,
+        "instrs": 12,
+        "temps": 4,
+        "colors": 1
+      },
+      "divmod": {
+        "blocks": 1,
+        "instrs": 4,
+        "temps": 1,
+        "colors": 1
+      },
+      "useDivmod": {
+        "blocks": 1,
+        "instrs": 4,
+        "temps": 1,
+        "colors": 1
+      },
+      "setFirst": {
+        "blocks": 1,
+        "instrs": 3,
+        "temps": 0,
+        "colors": 0
+      },
+      "fact": {
+        "blocks": 4,
+        "instrs": 9,
+        "temps": 3,
+        "colors": 1
+      }
+    }
+  },
+  "coloring": {
+    "before": {
+      "sq": {
+        "graph": {},
+        "colors": {},
+        "color_count": 0
+      },
+      "sumSq": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": [],
+          "%t4": []
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0,
+          "%t4": 0
+        },
+        "color_count": 1
+      },
+      "divmod": {
+        "graph": {
+          "%t1": []
+        },
+        "colors": {
+          "%t1": 0
+        },
+        "color_count": 1
+      },
+      "useDivmod": {
+        "graph": {
+          "%t1": []
+        },
+        "colors": {
+          "%t1": 0
+        },
+        "color_count": 1
+      },
+      "setFirst": {
+        "graph": {},
+        "colors": {},
+        "color_count": 0
+      },
+      "fact": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": []
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0
+        },
+        "color_count": 1
+      }
+    },
+    "after": {
+      "sq": {
+        "graph": {},
+        "colors": {},
+        "color_count": 0
+      },
+      "sumSq": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": [],
+          "%t4": []
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0,
+          "%t4": 0
+        },
+        "color_count": 1
+      },
+      "divmod": {
+        "graph": {
+          "%t1": []
+        },
+        "colors": {
+          "%t1": 0
+        },
+        "color_count": 1
+      },
+      "useDivmod": {
+        "graph": {
+          "%t1": []
+        },
+        "colors": {
+          "%t1": 0
+        },
+        "color_count": 1
+      },
+      "setFirst": {
+        "graph": {},
+        "colors": {},
+        "color_count": 0
+      },
+      "fact": {
+        "graph": {
+          "%t1": [],
+          "%t2": [],
+          "%t3": []
+        },
+        "colors": {
+          "%t1": 0,
+          "%t2": 0,
+          "%t3": 0
+        },
+        "color_count": 1
+      }
+    }
+  }
+}

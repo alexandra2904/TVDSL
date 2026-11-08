@@ -1,0 +1,28 @@
+digraph "classify" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|%t2 = x \> 0\l%t1 = %t2\lbr %t1, L1, L2\l}"];
+  "L1" [label="{L1:|%t3 = x \< 100\l%t1 = %t3\ljump L2\l}"];
+  "L2" [label="{L2:|br %t1, L3, L5\l}"];
+  "L3" [label="{L3:|r = 1\ljump L4\l}"];
+  "L5" [label="{L5:|%t5 = x == 0\l%t4 = %t5\lbr %t4, L7, L6\l}"];
+  "L6" [label="{L6:|%t6 = 0 - 100\l%t7 = x \< %t6\l%t4 = %t7\ljump L7\l}"];
+  "L7" [label="{L7:|br %t4, L8, L10\l}"];
+  "L8" [label="{L8:|r = 2\ljump L9\l}"];
+  "L10" [label="{L10:|r = 3\ljump L9\l}"];
+  "L9" [label="{L9:|jump L4\l}"];
+  "L4" [label="{L4:|ret r\l}"];
+  "entry" -> "L1" [label="true"];
+  "entry" -> "L2" [label="false"];
+  "L1" -> "L2";
+  "L2" -> "L3" [label="true"];
+  "L2" -> "L5" [label="false"];
+  "L3" -> "L4";
+  "L5" -> "L7" [label="true"];
+  "L5" -> "L6" [label="false"];
+  "L6" -> "L7";
+  "L7" -> "L8" [label="true"];
+  "L7" -> "L10" [label="false"];
+  "L8" -> "L9";
+  "L10" -> "L9";
+  "L9" -> "L4";
+}

@@ -1,0 +1,69 @@
+##### before
+interference graph of classify:
+  %t1 (int) -- -
+  %t2 (int) -- -
+  %t3 (int) -- -
+  %t4 (int) -- -
+  %t5 (int) -- -
+  %t6 (int) -- -
+  %t7 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 0
+  %t3 -> color 0
+  %t4 -> color 0
+  %t5 -> color 0
+  %t6 -> color 0
+  %t7 -> color 0
+colors: 1
+
+interference graph of sumTo:
+  %t1 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+colors: 1
+
+interference graph of scaled:
+  %t1 (int) -- -
+  %t2 (int) -- -
+  %t3 (int) -- %t4
+  %t4 (int) -- %t3
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 0
+  %t3 -> color 0
+  %t4 -> color 1
+colors: 2
+
+##### after
+interference graph of classify:
+  %t1 (int) -- -
+  %t2 (int) -- -
+  %t3 (int) -- -
+  %t4 (int) -- -
+  %t5 (int) -- -
+  %t7 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 0
+  %t3 -> color 0
+  %t4 -> color 0
+  %t5 -> color 0
+  %t7 -> color 0
+colors: 1
+
+interference graph of sumTo:
+  %t1 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+colors: 1
+
+interference graph of scaled:
+  %t1 (int) -- -
+  %t2 (int) -- -
+  %t3 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 0
+  %t3 -> color 0
+colors: 1

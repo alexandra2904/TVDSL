@@ -1,0 +1,68 @@
+##### before
+interference graph of demo:
+  %t1 (int) -- -
+  %t2 (int) -- -
+  %t3 (int) -- -
+  %t4 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 0
+  %t3 -> color 0
+  %t4 -> color 0
+colors: 1
+
+interference graph of poly:
+  %t1 (int) -- %t2
+  %t2 (int) -- %t1
+  %t3 (int) -- %t4, %t5, %t6, %t7
+  %t4 (int) -- %t3
+  %t5 (int) -- %t3, %t6
+  %t6 (int) -- %t3, %t5
+  %t7 (int) -- %t3
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 1
+  %t3 -> color 0
+  %t4 -> color 1
+  %t5 -> color 1
+  %t6 -> color 2
+  %t7 -> color 1
+colors: 3
+
+interference graph of constCond:
+  %t1 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+colors: 1
+
+##### after
+interference graph of demo:
+  %t2 (int) -- -
+  %t3 (int) -- -
+coloring (greedy, по убыванию степени):
+  %t2 -> color 0
+  %t3 -> color 0
+colors: 1
+
+interference graph of poly:
+  %t1 (int) -- %t2
+  %t2 (int) -- %t1
+  %t3 (int) -- %t4, %t5, %t6, %t7
+  %t4 (int) -- %t3
+  %t5 (int) -- %t3, %t6
+  %t6 (int) -- %t3, %t5
+  %t7 (int) -- %t3
+coloring (greedy, по убыванию степени):
+  %t1 -> color 0
+  %t2 -> color 1
+  %t3 -> color 0
+  %t4 -> color 1
+  %t5 -> color 1
+  %t6 -> color 2
+  %t7 -> color 1
+colors: 3
+
+interference graph of constCond:
+  (временных нет)
+coloring (greedy, по убыванию степени):
+colors: 0

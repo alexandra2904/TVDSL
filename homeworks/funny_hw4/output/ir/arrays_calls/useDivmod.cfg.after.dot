@@ -1,0 +1,4 @@
+digraph "useDivmod" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|q, m = call divmod(a, b)\l%t1 = q * 10\lr = %t1 + m\lret r\l}"];
+}

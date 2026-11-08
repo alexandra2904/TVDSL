@@ -1,0 +1,11 @@
+digraph "sumSq" {
+  node [shape=record, fontname=Courier];
+  "entry" [label="{entry:|s = 0\li = 0\ljump L1\l}"];
+  "L1" [label="{L1:|%t1 = length a\l%t2 = i \< %t1\lbr %t2, L2, L3\l}"];
+  "L2" [label="{L2:|%t3 = a[i]\l%t4 = call sq(%t3)\ls = s + %t4\li = i + 1\ljump L1\l}"];
+  "L3" [label="{L3:|ret s\l}"];
+  "entry" -> "L1";
+  "L1" -> "L2" [label="true"];
+  "L1" -> "L3" [label="false"];
+  "L2" -> "L1";
+}

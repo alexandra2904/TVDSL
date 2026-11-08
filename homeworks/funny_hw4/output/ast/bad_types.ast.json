@@ -1,0 +1,135 @@
+{
+  "node": "Module",
+  "functions": [
+    {
+      "node": "FunctionDef",
+      "name": "f",
+      "params": [
+        {
+          "node": "VariableDef",
+          "name": "x",
+          "type": "int",
+          "pos": 90
+        },
+        {
+          "node": "VariableDef",
+          "name": "a",
+          "type": "int[]",
+          "pos": 98
+        }
+      ],
+      "requires": null,
+      "returns": [
+        {
+          "node": "VariableDef",
+          "name": "r",
+          "type": "int",
+          "pos": 116
+        }
+      ],
+      "ensures": null,
+      "uses": [
+        {
+          "node": "LocalVarDef",
+          "name": "t",
+          "type": null,
+          "pos": 128
+        }
+      ],
+      "body": {
+        "node": "Block",
+        "statements": [
+          {
+            "node": "SimpleAssign",
+            "target": "r",
+            "value": {
+              "node": "Var",
+              "name": "a",
+              "pos": 140
+            },
+            "pos": 136
+          },
+          {
+            "node": "If",
+            "condition": {
+              "node": "Var",
+              "name": "x",
+              "pos": 151
+            },
+            "then_branch": {
+              "node": "Block",
+              "statements": [
+                {
+                  "node": "SimpleAssign",
+                  "target": "r",
+                  "value": {
+                    "node": "IntLiteral",
+                    "value": 1,
+                    "pos": 160
+                  },
+                  "pos": 156
+                }
+              ],
+              "pos": 154
+            },
+            "else_branch": null,
+            "pos": 147
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "x",
+            "value": {
+              "node": "IntLiteral",
+              "value": 5,
+              "pos": 173
+            },
+            "pos": 169
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "r",
+            "value": {
+              "node": "BinOp",
+              "op": "+",
+              "left": {
+                "node": "Var",
+                "name": "unknown",
+                "pos": 184
+              },
+              "right": {
+                "node": "IntLiteral",
+                "value": 1,
+                "pos": 194
+              },
+              "pos": 192
+            },
+            "pos": 180
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "t",
+            "value": {
+              "node": "Var",
+              "name": "x",
+              "pos": 205
+            },
+            "pos": 201
+          },
+          {
+            "node": "SimpleAssign",
+            "target": "t",
+            "value": {
+              "node": "Var",
+              "name": "a",
+              "pos": 216
+            },
+            "pos": 212
+          }
+        ],
+        "pos": 130
+      },
+      "pos": 88
+    }
+  ],
+  "formulas": []
+}

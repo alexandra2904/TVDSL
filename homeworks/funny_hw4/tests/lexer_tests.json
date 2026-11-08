@@ -1,0 +1,113 @@
+{
+  "tests": [
+    {"name": "empty string is not a token", "kind": "token", "input": "", "expected_token": null},
+
+    {"name": "single zero", "kind": "token", "input": "0", "expected_token": "INT"},
+    {"name": "leading zero is rejected as one integer token", "kind": "token", "input": "01", "expected_token": null},
+    {"name": "positive integer", "kind": "token", "input": "123456", "expected_token": "INT"},
+
+    {"name": "identifier", "kind": "token", "input": "abc", "expected_token": "IDENT"},
+    {"name": "identifier with digits", "kind": "token", "input": "abc123", "expected_token": "IDENT"},
+    {"name": "underscore identifier is rejected", "kind": "token", "input": "_abc", "expected_token": null},
+
+    {"name": "function keyword", "kind": "token", "input": "function", "expected_token": "FUNCTION"},
+    {"name": "returns keyword", "kind": "token", "input": "returns", "expected_token": "RETURNS"},
+    {"name": "while keyword", "kind": "token", "input": "while", "expected_token": "WHILE"},
+    {"name": "if keyword", "kind": "token", "input": "if", "expected_token": "IF"},
+    {"name": "else keyword", "kind": "token", "input": "else", "expected_token": "ELSE"},
+    {"name": "assert keyword", "kind": "token", "input": "assert", "expected_token": "ASSERT"},
+    {"name": "assume keyword", "kind": "token", "input": "assume", "expected_token": "ASSUME"},
+    {"name": "invariant keyword", "kind": "token", "input": "invariant", "expected_token": "INVARIANT"},
+    {"name": "length keyword", "kind": "token", "input": "length", "expected_token": "LENGTH"},
+
+    {"name": "spaces", "kind": "token", "input": "   ", "expected_token": "WS"},
+    {"name": "tabs and CRLF", "kind": "token", "input": "\t\r\n", "expected_token": "WS"},
+    {"name": "comment", "kind": "token", "input": "// hello world", "expected_token": "COMMENT"},
+    {"name": "comment to end of line", "kind": "source", "input": "// comment\nx", "expected_tokens": [
+      {"token": "IDENT", "lexeme": "x"}
+    ]},
+
+    {"name": "parentheses", "kind": "source", "input": "()", "expected_tokens": [
+      {"token": "LPAREN", "lexeme": "("},
+      {"token": "RPAREN", "lexeme": ")"}
+    ]},
+    {"name": "brackets", "kind": "source", "input": "[]", "expected_tokens": [
+      {"token": "LBRACKET", "lexeme": "["},
+      {"token": "RBRACKET", "lexeme": "]"}
+    ]},
+    {"name": "braces", "kind": "source", "input": "{}", "expected_tokens": [
+      {"token": "LBRACE", "lexeme": "{"},
+      {"token": "RBRACE", "lexeme": "}"}
+    ]},
+    {"name": "comma semicolon", "kind": "source", "input": ",;", "expected_tokens": [
+      {"token": "COMMA", "lexeme": ","},
+      {"token": "SEMICOLON", "lexeme": ";"}
+    ]},
+    {"name": "arithmetic operators", "kind": "source", "input": "+-*/", "expected_tokens": [
+      {"token": "PLUS", "lexeme": "+"},
+      {"token": "MINUS", "lexeme": "-"},
+      {"token": "STAR", "lexeme": "*"},
+      {"token": "SLASH", "lexeme": "/"}
+    ]},
+    {"name": "comparison and assignment operators", "kind": "source", "input": "== != <= >= < > =", "expected_tokens": [
+      {"token": "EQ", "lexeme": "=="},
+      {"token": "NE", "lexeme": "!="},
+      {"token": "LE", "lexeme": "<="},
+      {"token": "GE", "lexeme": ">="},
+      {"token": "LT", "lexeme": "<"},
+      {"token": "GT", "lexeme": ">"},
+      {"token": "ASSIGN", "lexeme": "="}
+    ]},
+
+    {"name": "arrow and punctuation", "kind": "source", "input": "-> : |", "expected_tokens": [
+      {"token": "ARROW", "lexeme": "->"},
+      {"token": "COLON", "lexeme": ":"},
+      {"token": "PIPE", "lexeme": "|"}
+    ]},
+
+    {"name": "fat arrow for formula definitions", "kind": "source", "input": "nonneg(x:int) => x >= 0", "expected_tokens": [
+      {"token": "IDENT", "lexeme": "nonneg"},
+      {"token": "LPAREN", "lexeme": "("},
+      {"token": "IDENT", "lexeme": "x"},
+      {"token": "COLON", "lexeme": ":"},
+      {"token": "INT_TYPE", "lexeme": "int"},
+      {"token": "RPAREN", "lexeme": ")"},
+      {"token": "FATARROW", "lexeme": "=>"},
+      {"token": "IDENT", "lexeme": "x"},
+      {"token": "GE", "lexeme": ">="},
+      {"token": "INT", "lexeme": "0"}
+    ]},
+
+    {"name": "fat arrow is one token not assign then gt", "kind": "token", "input": "=>", "expected_token": "FATARROW"},
+
+    {"name": "keyword boundary uses longest match", "kind": "source", "input": "function1", "expected_tokens": [
+      {"token": "IDENT", "lexeme": "function1"}
+    ]},
+
+    {"name": "mixed Funny source", "kind": "source", "input": "function f(a:int) returns x:int { // c\n x = a + 1;\n}", "expected_tokens": [
+      {"token": "FUNCTION", "lexeme": "function"},
+      {"token": "IDENT", "lexeme": "f"},
+      {"token": "LPAREN", "lexeme": "("},
+      {"token": "IDENT", "lexeme": "a"},
+      {"token": "COLON", "lexeme": ":"},
+      {"token": "INT_TYPE", "lexeme": "int"},
+      {"token": "RPAREN", "lexeme": ")"},
+      {"token": "RETURNS", "lexeme": "returns"},
+      {"token": "IDENT", "lexeme": "x"},
+      {"token": "COLON", "lexeme": ":"},
+      {"token": "INT_TYPE", "lexeme": "int"},
+      {"token": "LBRACE", "lexeme": "{"},
+      {"token": "IDENT", "lexeme": "x"},
+      {"token": "ASSIGN", "lexeme": "="},
+      {"token": "IDENT", "lexeme": "a"},
+      {"token": "PLUS", "lexeme": "+"},
+      {"token": "INT", "lexeme": "1"},
+      {"token": "SEMICOLON", "lexeme": ";"},
+      {"token": "RBRACE", "lexeme": "}"}
+    ]},
+
+    {"name": "non ASCII trap", "kind": "error", "input": "é"},
+    {"name": "underscore trap", "kind": "error", "input": "_"},
+    {"name": "unrecognized dollar trap", "kind": "error", "input": "$"}
+  ]
+}
